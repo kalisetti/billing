@@ -1,0 +1,30 @@
+--
+-- 2022/11/11
+-- Billing System - Database Structure
+--
+--
+
+--
+-- CREATE DATABASE & ADMIN USER FOR THE APPLICATION
+--
+
+CREATE DATABASE billing;
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';
+GRANT ALL PRIVILEGES ON billing.* TO 'admin'@'localhost';
+FLUSH PRIVILEGES;
+
+--
+-- USER MANAGEMENT
+--
+
+CREATE TABLE users(
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	username VARCHAR(140) NOT NULL UNIQUE,
+	password VARCHAR(255) NOT NULL,
+	docstatus TINYINT(1),
+	created_by  VARCHAR(140),
+	created_on  DATETIME DEFAULT CURRENT_TIMESTAMP,
+	modified_by VARCHAR(140),
+	modified_on DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
