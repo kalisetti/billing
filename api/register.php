@@ -4,12 +4,12 @@ require_once 'request-parser.php';
 
 // Check if the request is a POST request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = parseRequestBody();
+    $_POST = parseRequestBody();
 
     // Get registration data from the request
-    $username = $data['username'];
-    $email = $data['email'];
-    $password = $data['password'];
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
 
     // Hash the password
