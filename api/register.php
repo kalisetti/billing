@@ -1,23 +1,42 @@
 <?php
 require_once 'config.php';
+require_once 'request-parser.php';
 
-// Get registration data from the request
-$name = $_POST['name'];
-$email = $_POST['email'];
-$password = $_POST['password'];
+// Check if the request is a POST request
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = parseRequestBody();
 
-// Hash the password
-$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    // Get registration data from the request
+    $username = $data['username'];
+    $email = $data['email'];
+    $password = $data['password'];
 
-// Insert the user into the database
-$stmt = $conn->prepare('INSERT INTO users (name, email, password) VALUES (?, ?, ?)');
-$stmt->bind_param('sss', $name, $email, $hashedPassword);
-$stmt->execute();
 
-// Close the database connection
-$stmt->close();
-$conn->close();
+    // Hash the password
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-// Return a success message
-echo json_encode(['message' => 'User registered successfully']);
+    try {
+        // Insert the user into the database
+        $stmt = $conn->prepare('INSERT INTO users (name, username, email, password) VALUES (?, ?, ?, ?)');
+        $stmt->bind_param('ssss', $email, $username, $email, $hashedPassword);
+
+        if ($stmt->execute()) {
+            // Registration successful
+            echo json_encode(['message' => 'User registered successfully']);
+        } else {
+            // Registration failed
+            echo json_encode(['error' => 'Failed to register user']);
+        }
+        
+        // Close the database connection
+        $stmt->close();
+        $conn->close();
+    } catch (Exception $e) {
+        // Handle any exceptions that occured during the execution of the SQL statement
+        echo json_encode(['error' => 'Error '.$e->getCode().' : '.$e->getMessage()]);
+    }
+} else {
+    // Return an error response for non-POST requests
+    echo json_encode(['error' => 'Invalid request method']);
+}
 ?>
