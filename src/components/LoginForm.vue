@@ -38,11 +38,12 @@
           if (response.data.message === 'Login successful') {
             // Login successful
             // Redirect the user or perform additional actions
-            console.log('Login successful');
+            console.log(response.data.message);
           } else {
             // Login error
             // Display an error message or perform additional actions
-            console.log('Login error');
+            console.log(response.data.error);
+            console.log(response);
           }
         })
         .catch(error => {
