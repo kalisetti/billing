@@ -20,6 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if the user exists and verify the password
     if ($user && password_verify($password, $user['password'])) {
       // User login successful
+      session_start();
+      $_SESSION['user_id'] = $email;
+      
       echo json_encode(['message' => 'Login successful']);
     } else {
       // Invalid credentials
