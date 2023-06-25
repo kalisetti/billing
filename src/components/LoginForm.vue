@@ -39,6 +39,7 @@
             // Login successful
             // Redirect the user or perform additional actions
             console.log(response.data.message);
+            this.$router.push('/desk');
           } else {
             // Login error
             // Display an error message or perform additional actions
