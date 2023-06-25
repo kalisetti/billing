@@ -32,6 +32,7 @@ export default {
   watch: {
     $route(to) {
       // Check authentication whenever the route changes
+      console.log(to);
       this.checkAuthentication();
     }
   }
