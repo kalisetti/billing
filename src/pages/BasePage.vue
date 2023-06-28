@@ -16,7 +16,7 @@
 <script>
 import PageHeader from './PageHeader.vue';
 import PageFooter from './PageFooter.vue';
-import NavBar from '../components/nav/NavBar.vue';
+import NavBar from './navigation/NavBar.vue';
 
 export default {
     name: "BasePage",

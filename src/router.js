@@ -6,7 +6,6 @@ import DeskView from './components/DeskView.vue';
 import NotFound from './pages/NotFound.vue';
 
 import LogoutPage from './components/LogoutPage.vue';
-import NavBar from './components/nav/NavBar.vue';
 
 const routes = [
   { path: '/', redirect: '/login'},
