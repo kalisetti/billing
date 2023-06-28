@@ -24,7 +24,7 @@ export default {
           if (response.data.loggedIn) {
             // User is already logged in, redirect to the desk page
             console.log('response.data.loggedIn', response.data.loggedIn);
-            this.$router.push('/desk');
+            // this.$router.push('/desk');
           } else {
             this.$router.push('/login');
           }

@@ -38,6 +38,11 @@
                 >Settings</router-link
               >
             </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/desk/users"
+                >Users</router-link
+              >
+            </li>
           </ul>
         </div>
       </nav>
