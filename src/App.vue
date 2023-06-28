@@ -1,26 +1,16 @@
 <template>
   <div>
-    <!-- <h1>User Login and Registration</h1>
-    <router-link to="/login">Login</router-link> |
-    <router-link to="/register">Register</router-link>
-    <router-view></router-view> -->
-    <header>
-      <router-view name="header"></router-view>
-    </header>
-    <main>
-      <router-view></router-view>
-    </main>
-    <footer>
-      <router-view name="footer"></router-view>
-    </footer>
+    <base-page></base-page>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import BasePage from './pages/BasePage.vue';
 
 export default {
   name: "App",
+  components: { BasePage },
   created() {
     console.log('App.vue: created step1...');
     this.checkAuthentication();
@@ -68,9 +58,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-/* h1 {
-  text-align: center;
-} */
-</style>

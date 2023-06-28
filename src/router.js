@@ -4,18 +4,15 @@ import LoginForm from './components/LoginForm.vue';
 import RegistrationForm from './components/RegistrationForm.vue';
 import DeskView from './components/DeskView.vue';
 import NotFound from './pages/NotFound.vue';
-import PageHeader from './pages/PageHeader.vue';
-import PageFooter from './pages/PageFooter.vue';
+
 import LogoutPage from './components/LogoutPage.vue';
+import NavBar from './components/nav/NavBar.vue';
 
 const routes = [
   { path: '/', redirect: '/login'},
-  { path: '/login', component: LoginForm },
-  { path: '/register', component: RegistrationForm },
-  { 
-    path: '/desk', 
-    components: { default: DeskView, header: PageHeader, footer: PageFooter },
-  },
+  { path: '/login', name: 'login', components: { default: LoginForm } },
+  { path: '/register', name: 'register', component: RegistrationForm },
+  { path: '/desk', name: 'desk', components: { default: DeskView } },
   { path: '/logout', name: 'logout', component: LogoutPage},
   { path: '/:notFound(.*)', component: NotFound },
 ];
