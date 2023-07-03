@@ -19,27 +19,27 @@
               <router-link class="nav-link" to="/desk">Home</router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/desk/customers"
+              <router-link class="nav-link" to="/desk/List/customers"
                 >Customers</router-link
               >
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/desk/invoices"
+              <router-link class="nav-link" to="/desk/List/invoices"
                 >Invoices</router-link
               >
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/desk/payments"
+              <router-link class="nav-link" to="/desk/List/payments"
                 >Payments</router-link
               >
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/desk/settings"
+              <router-link class="nav-link" to="/desk/List/settings"
                 >Settings</router-link
               >
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/desk/users"
+              <router-link class="nav-link" to="/desk/List/users"
                 >Users</router-link
               >
             </li>
