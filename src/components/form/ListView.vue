@@ -19,6 +19,7 @@
         <main>
             <div class="table-responsive">
                 <table class="table table-striped">
+                    <caption>List view results for table {{ tableName }}</caption>
                     <thead>
                         <tr>
                             <th v-for="column in columns" :key="column">{{ column }}</th>
@@ -71,7 +72,7 @@ export default {
     methods: {
         fetchData() {
             // Make an API call to fetch the data from the specified table
-            axios.get(`/api/fetchData.php?table=${this.tableName}`)
+            axios.get(`/api/fetchData.php?table=${this.tableName}&limit=${this.pageSize}`)
                 .then((response) => {
                     this.columns = response.data.columns;
                     this.rows = response.data.rows;
@@ -97,6 +98,7 @@ export default {
     watch: {
       tableName(newId) {
         console.log('newId', newId);
+        this.fetchData();
       }
     }
 };

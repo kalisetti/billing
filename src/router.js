@@ -22,7 +22,7 @@ const routes = [
             component: DeskPage,
         },
         {
-            path: ':tableName',
+            path: 'List/:tableName',
             component: ListView,
             props: true,
         }
