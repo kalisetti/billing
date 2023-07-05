@@ -1,21 +1,23 @@
 <?php
-require_once 'config.php';
-require_once 'request-parser.php';
+require_once 'App/Database/DB.php';
+require_once 'App/Utils/requestParser.php';
+
+use App\Database\DB;
+use App\Utils;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $_POST = parseRequestBody();
+  $_POST = Utils\parseRequestBody();
 
   // Get login data from the request
   $email = $_POST['email'];
   $password = $_POST['password'];
-
+  
+  $db = DB::getInstance();
   try {
-    // Retrieve the user from the database
-    $stmt = $conn->prepare('SELECT name, password FROM users WHERE name = ?');
-    $stmt->bind_param('s', $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
+    $query = 'SELECT name, password FROM users WHERE name = ?';
+    $params = [$email];
+    $rows = $db->sql($query, $params);
+    $user = $rows[0];
 
     // Check if the user exists and verify the password
     if ($user && password_verify($password, $user['password'])) {
@@ -23,21 +25,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       session_start();
       $_SESSION['user_id'] = $email;
       
-      echo json_encode(['message' => 'Login successful']);
+      $response = array(
+        'success' => true,
+        'message' => 'Login successful'
+      );
     } else {
       // Invalid credentials
-      echo json_encode(['error' => 'Invalid credentials']);
+      $response = array(
+        'success' => false,
+        'error' => '',
+        'message' => 'Invalid credentials'
+      );
     }
-
-    // Close the database connection
-    $stmt->close();
-    $conn->close();
   } catch (Exception $e) {
     // Handle any exceptions that occured during the execution of the SQL statement
-    echo json_encode(['error' => 'Error '.$e->getCode().' : '.$e->getMessage()]);
+    $response = array(
+      'success' => false,
+      'error' => 'Error '.$e->getCode().' : '.$e->getMessage(),
+      'message' => ''
+    );
   }
 } else {
   // Return an error response for non-POST requests
-  echo json_encode(['error' => 'Invalid request method']);
+  $response = array(
+    'success' => false,
+    'error' => 'Invalid request method',
+    'message' => ''
+  );
 }
-?>
+
+// Set the content type and return the response as JSON
+header('Content-Type: application/json');
+echo json_encode($response);
