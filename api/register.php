@@ -1,10 +1,13 @@
 <?php
-require_once 'config.php';
-require_once 'request-parser.php';
+require_once 'App/Database/DB.php';
+require_once 'App/Utils/requestParser.php';
+
+use App\Database\DB;
+use App\Utils;
 
 // Check if the request is a POST request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $_POST = parseRequestBody();
+    $_POST = Utils\parseRequestBody();
 
     // Get registration data from the request
     $username = $_POST['username'];
@@ -17,26 +20,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         // Insert the user into the database
-        $stmt = $conn->prepare('INSERT INTO users (name, username, email, password) VALUES (?, ?, ?, ?)');
-        $stmt->bind_param('ssss', $email, $username, $email, $hashedPassword);
+        $db = DB::getInstance();
+        $query = 'INSERT INTO users (name, username, email, password) VALUES (?, ?, ?, ?)';
+        $params = [$email, $username, $email, $hashedPassword];
+        $rows = $db->sql($query, $params);
 
-        if ($stmt->execute()) {
-            // Registration successful
-            echo json_encode(['message' => 'User registered successfully']);
-        } else {
-            // Registration failed
-            echo json_encode(['error' => 'Failed to register user']);
-        }
-        
-        // Close the database connection
-        $stmt->close();
-        $conn->close();
+        $response = array(
+          'success' => true,
+          'error' => '',
+          'message' => 'User registered successfully'
+        );
     } catch (Exception $e) {
         // Handle any exceptions that occured during the execution of the SQL statement
-        echo json_encode(['error' => 'Error '.$e->getCode().' : '.$e->getMessage()]);
+        $response = array(
+          'success' => false,
+          'error' => array('errcd' => $e->getCode(), 'errmsg' => $e->getMessage()),
+          'message' => ''
+        );
     }
 } else {
     // Return an error response for non-POST requests
-    echo json_encode(['error' => 'Invalid request method']);
+    $response = array(
+      'success' => false,
+      'error' => '',
+      'message' => 'Invalid request method'
+    );
 }
-?>
+
+// Set the content type and return the response as JSON
+header('Content-Type: application/json');
+echo json_encode($response);

@@ -65,9 +65,9 @@ class DB {
         if (!empty($params)) {
             $paramTypes = '';
             $bindParams = [];
-            foreach ($params as $param) {
+            foreach ($params as $index => $param) {
                 $paramTypes .= $this->getParamType($param);
-                $bindParams[] = &$param;
+                $bindParams[$index] = &$params[$index];
             }
             array_unshift($bindParams, $paramTypes);
 
@@ -88,7 +88,7 @@ class DB {
         $queryType = strtoupper(explode(" ", trim($query))[0]);
 
         // Return the result based on query type
-        if ($queryType === "SELECT") {
+        if ($queryType === "SELECT" || $queryType === "DESCRIBE") {
             $result = $statement->get_result();
             if ($result === false) {
                 throw new ThrowException("Error getting SQL query result: " . $this->connection->error);

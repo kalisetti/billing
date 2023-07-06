@@ -1,40 +1,42 @@
 <?php
-require_once 'config.php';
+require_once 'App/Database/DB.php';
+
+use App\Database\DB;
 
 // Get the table name from the query parameter
 $tableName = $_GET['table'];
 
-// Fetch the columns of the table
-$columns = [];
-// $stmt = $conn->prepare('DESCRIBE ?');
-// $stmt->bind_param('s', $tableName);
-// $stmt->execute();
-// $result = $stmt->get_result();
-$sql = "DESCRIBE $tableName";
-$result = $conn->query($sql);
+try {
+    $db = DB::getInstance();
 
-while ($row = mysqli_fetch_assoc($result)) {
-    $columns[] = $row['Field'];
-}
+    // Fetch the columns of the table
+    $columns = [];
+    $result = $db->sql("DESCRIBE $tableName");
+    foreach ($result as $row) {
+      $columns[] = $row['Field'];
+    }
 
-
-// Fetch the rows from the table
-$rows = [];
-// $stmt = $conn->prepare('SELECT * FROM ?');
-// $stmt->bind_param('s', $tableName);
-// $stmt->execute();
-// $result = $stmt->get_result();
-$sql = "SELECT * FROM $tableName";
-$result = $conn->query($sql);
-
-while ($row = mysqli_fetch_assoc($result)) {
-    $rows[] = $row;
+    // Fetch the rows from the table
+    $rows = [];
+    $result = $db->sql("SELECT * FROM $tableName ORDER BY modified_on DESC");
+    foreach ($result as $row) {
+      $rows[] = $row;
+    }
+} catch (Exception $e) {
+    // Handle any exceptions that occured during the execution of the SQL statement
+    $response = array(
+      'success' => false,
+      'error' => array('errcd' => $e->getCode(), 'errmsg' => $e->getMessage()),
+      'message' => ''
+    );
 }
 
 // Return the columns and rows as JSON response
 $response = [
-    'columns' => $columns,
-    'rows' => $rows
+  'columns' => $columns,
+  'rows' => $rows
 ];
 
+// Set the content type and return the response as JSON
+header('Content-Type: application/json');
 echo json_encode($response);

@@ -12,8 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $email = $_POST['email'];
   $password = $_POST['password'];
   
-  $db = DB::getInstance();
   try {
+    $db = DB::getInstance();
     $query = 'SELECT name, password FROM users WHERE name = ?';
     $params = [$email];
     $rows = $db->sql($query, $params);
@@ -27,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       
       $response = array(
         'success' => true,
+        'error' => '',
         'message' => 'Login successful'
       );
     } else {
@@ -41,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Handle any exceptions that occured during the execution of the SQL statement
     $response = array(
       'success' => false,
-      'error' => 'Error '.$e->getCode().' : '.$e->getMessage(),
+      'error' => array('errcd' => $e->getCode(), 'errmsg' => $e->getMessage()),
       'message' => ''
     );
   }
@@ -49,8 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // Return an error response for non-POST requests
   $response = array(
     'success' => false,
-    'error' => 'Invalid request method',
-    'message' => ''
+    'error' => '',
+    'message' => 'Invalid request method'
   );
 }
 
