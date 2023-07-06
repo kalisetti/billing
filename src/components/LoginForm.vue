@@ -1,4 +1,5 @@
 <template>
+  <base-card>
     <div class="container">
       <h2 class="mt-5">Login</h2>
       <form @submit.prevent="login" class="mt-4">
@@ -12,8 +13,19 @@
         </div>
         <button type="submit" class="btn btn-primary">Login</button>
       </form>
+
+      <base-dialog v-if="msgprint" title="Something" @close="confirmError">
+        <template #default>
+          <p>This is some message</p>
+          <p>And more details</p>
+        </template>
+        <template #actions>
+          <base-button @click="confirmError">Okay</base-button>
+        </template>
+      </base-dialog>
     </div>
-  </template>
+  </base-card>
+</template>
   
   
   <script>
@@ -25,6 +37,7 @@
       return {
         email: '',
         password: '',
+        msgprint: false,
       };
     },
     methods: {
@@ -45,14 +58,19 @@
             // Display an error message or perform additional actions
             console.log(response.data.error);
             console.log(response);
+            this.msgprint = true;
           }
         })
         .catch(error => {
           // Handle the error
           // Display an error message or perform additional actions
           console.log('ERRRR: ', error);
+          this.msgprint = true;
         });
       },
+      confirmError() {
+        this.msgprint = false;
+      }
     },
   };
   </script>
