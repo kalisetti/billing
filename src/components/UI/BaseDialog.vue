@@ -4,7 +4,7 @@
         <dialog open>
             <header>
                 <slot name="header">
-                    <h2>{{ title }}</h2>
+                    <h5>{{ title }}</h5>
                 </slot>
             </header>
             <section>
@@ -61,10 +61,10 @@ header {
     background-color: #3a0061;
     color: white;
     width: 100%;
-    padding: 1rem;
+    padding: 0.6rem 1rem;
 }
 
-header h2 {
+header h5 {
     margin: 0;
 }
 

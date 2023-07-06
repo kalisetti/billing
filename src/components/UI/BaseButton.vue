@@ -13,10 +13,11 @@ export default {
 
 <style scoped>
 button {
-    padding: 0.75rem 1.5rem;
+    padding: 0.4rem 1.5rem;
+    margin-left: 0.5rem;
     font-family: inherit;
-    background-color: #3a0061;
-    border: 1px solid #3a0061;
+    background-color: #273eed;
+    border: 1px solid #273eed;
     color: white;
     cursor: pointer;
 }
