@@ -17,13 +17,9 @@ try {
 
     // Fetch the rows from the table
     $result = $db->sql("SELECT * FROM $tableName ORDER BY modified_on DESC LIMIT $limit");
-    foreach ($result as $row) {
-      $rows[] = $row;
-    }
-
     $response = [
       'columns' => $columns,
-      'rows' => $rows
+      'rows' => $result
     ];
 } catch (Exception $e) {
     // Handle any exceptions that occured during the execution of the SQL statement
