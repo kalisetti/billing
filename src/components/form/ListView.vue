@@ -12,11 +12,17 @@
                     </ul>
                 </div>
                 <button class="btn btn-primary ms-2" @click="refreshData">Refresh</button>
-                <button class="btn btn-primary ms-2" @click="createNew">New</button>
+                <button class="btn btn-primary ms-2" @click="createNewRecord">New</button>
             </div>
         </header>
 
         <main>
+            <div v-if="isLoading" class="loading-overlay">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+
             <div class="table-responsive">
                 <table class="table table-striped">
                     <caption>List view results for table {{ tableName }}</caption>
@@ -26,7 +32,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="row in rows" :key="row.name">
+                        <tr v-for="row in rows" :key="row.name" @click="editRecord(row)">
                             <td v-for="column in columns" :key="column">{{ row[column] }}</td>
                         </tr>
                     </tbody>
@@ -37,14 +43,17 @@
         <footer>
             <nav class="mt-3" aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
-                    <li class="page-item" :class="{ active: pageSize === 20 }" @click="changePageSize(20)">
-                        <a class="page-link" href="#">20</a>
+                    <li class="page-item" :class="{ active: pageSize === 5 }" @click="changePageSize(5)">
+                        <!-- <a class="page-link" href="#">5</a> -->
+                        <span class="page-link">5</span>
                     </li>
-                    <li class="page-item" :class="{ active: pageSize === 50 }" @click="changePageSize(50)">
-                        <a class="page-link" href="#">50</a>
+                    <li class="page-item" :class="{ active: pageSize === 10 }" @click="changePageSize(10)">
+                        <!-- <a class="page-link" href="#">10</a> -->
+                        <span class="page-link">10</span>
                     </li>
-                    <li class="page-item" :class="{ active: pageSize === 100 }" @click="changePageSize(100)">
-                        <a class="page-link" href="#">100</a>
+                    <li class="page-item" :class="{ active: pageSize === 15 }" @click="changePageSize(15)">
+                        <!-- <a class="page-link" href="#">15</a> -->
+                        <span class="page-link">15</span>
                     </li>
                 </ul>
             </nav>
@@ -62,7 +71,8 @@ export default {
         return {
             columns: [],
             rows: [],
-            pageSize: 20,
+            pageSize: 5,
+            isLoading: false,
         }
     },
     created() {
@@ -71,6 +81,7 @@ export default {
     },
     methods: {
         fetchData() {
+            this.isLoading = true;
             // Make an API call to fetch the data from the specified table
             axios.get(`/api/fetchData.php?table=${this.tableName}&limit=${this.pageSize}`)
                 .then((response) => {
@@ -80,19 +91,27 @@ export default {
                 .catch((error) => {
                     console.error('Error fetching data: ', error);
                 })
+                .finally(() => {
+                    this.isLoading = false;
+                })
         },
         refreshData() {
             // Refresh the data by making another API call
             this.fetchData();
         },
-        createNew() {
+        createNewRecord() {
             // Handle creating a new record
+            const newRecordId = `new-${this.tableName}`;
+            this.$router.push(`/desk/Edit/${this.tableName}/${newRecordId}`);
+        },
+        editRecord(row) {
+            const recordId = row.name;
+            this.$router.push(`/desk/Edit/${this.tableName}/${recordId}`);
         },
         changePageSize(size) {
-            // Change page size and fetch additional rows
+            console.log('changePagesize: ', size);
             this.pageSize = size;
-            // Make an API call to fetch additional rows based on the new page size
-            // Update the rows data with the fetched rows
+            this.fetchData();
         },
     },
     watch: {
@@ -105,4 +124,24 @@ export default {
 </script>
 
 <style scoped>
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+}
+
+.loading-overlay .spinner-border {
+    color: #ffffff;
+}
+
+.page-link {
+    cursor: pointer;
+}
 </style>

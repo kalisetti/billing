@@ -4,6 +4,7 @@ import LoginForm from './components/LoginForm.vue';
 import RegistrationForm from './components/RegistrationForm.vue';
 import DeskView from './components/DeskView.vue';
 import LogoutPage from './components/LogoutPage.vue';
+import FormView from './components/form/FormView.vue';
 import ListView from './components/form/ListView.vue';
 import NotFound from './pages/NotFound.vue';
 import DeskPage from './pages/DeskPage.vue';
@@ -23,9 +24,16 @@ const routes = [
         },
         {
             path: 'List/:tableName',
+            name: 'list',
             component: ListView,
             props: true,
-        }
+        },
+        {
+          path: 'Edit/:tableName/:recordId',
+          name: 'edit',
+          component: FormView,
+          props: true,
+      }
     ] 
   },
   { path: '/logout', name: 'logout', component: LogoutPage},
