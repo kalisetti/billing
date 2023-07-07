@@ -5,20 +5,21 @@ use App\Database\DB;
 
 // Get the table name from the query parameter
 $tableName = $_GET['table'];
+$limit = $_GET['limit'];
 
+$columns = [];
+$rows = [];
 try {
     $db = DB::getInstance();
-
     // Fetch the columns of the table
-    $columns = [];
+    
     $result = $db->sql("DESCRIBE $tableName");
     foreach ($result as $row) {
       $columns[] = $row['Field'];
     }
 
     // Fetch the rows from the table
-    $rows = [];
-    $result = $db->sql("SELECT * FROM $tableName ORDER BY modified_on DESC");
+    $result = $db->sql("SELECT * FROM $tableName ORDER BY modified_on DESC LIMIT $limit");
     foreach ($result as $row) {
       $rows[] = $row;
     }
