@@ -11,12 +11,9 @@ $columns = [];
 $rows = [];
 try {
     $db = DB::getInstance();
+
     // Fetch the columns of the table
-    
-    $result = $db->sql("DESCRIBE $tableName");
-    foreach ($result as $row) {
-      $columns[] = $row['Field'];
-    }
+    $columns = $db->getColumns($tableName);
 
     // Fetch the rows from the table
     $result = $db->sql("SELECT * FROM $tableName ORDER BY modified_on DESC LIMIT $limit");

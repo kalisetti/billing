@@ -38,6 +38,14 @@ class DB {
         return self::$instance;
     }
 
+    public function getColumns($tableName) {
+        $columns = [];
+        $result = $this->sql("DESCRIBE $tableName");
+        foreach ($result as $row) {
+            $columns[] = $row['Field'];
+        }
+        return $columns;
+    }
     public function sql($query, $params = []) {
         // Prepare the query
         $statement = $this->prepareStatement($query);
