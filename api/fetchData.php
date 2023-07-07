@@ -20,6 +20,11 @@ try {
     foreach ($result as $row) {
       $rows[] = $row;
     }
+
+    $response = [
+      'columns' => $columns,
+      'rows' => $rows
+    ];
 } catch (Exception $e) {
     // Handle any exceptions that occured during the execution of the SQL statement
     $response = array(
@@ -28,12 +33,6 @@ try {
       'message' => ''
     );
 }
-
-// Return the columns and rows as JSON response
-$response = [
-  'columns' => $columns,
-  'rows' => $rows
-];
 
 // Set the content type and return the response as JSON
 header('Content-Type: application/json');
