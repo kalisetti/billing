@@ -144,4 +144,16 @@ export default {
 .page-link {
     cursor: pointer;
 }
+
+header {
+    margin-bottom: 1rem;
+}
+
+table {
+    white-space: nowrap;
+}
+
+thead {
+    background-color: #b0c4de;
+}
 </style>

@@ -11,7 +11,7 @@ $columns = [];
 $rows = [];
 try {
     $db = DB::getInstance();
-
+    
     // Fetch the columns of the table
     $columns = $db->getColumns($tableName);
 

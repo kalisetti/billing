@@ -27,5 +27,10 @@ export default {
 <style scoped>
 main {
     min-height: 500px;
+    font-size: 0.95rem;
+}
+
+#main {
+    margin: 1rem;
 }
 </style>
