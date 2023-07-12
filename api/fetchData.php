@@ -6,6 +6,7 @@ use App\Database\DB;
 // Get the table name from the query parameter
 $tableName = $_GET['table'];
 $limit = $_GET['limit'];
+$offset = $_GET['offset'];
 
 $columns = [];
 $rows = [];
@@ -16,7 +17,7 @@ try {
     $columns = $db->getColumns($tableName);
 
     // Fetch the rows from the table
-    $result = $db->sql("SELECT * FROM $tableName ORDER BY modified_on DESC LIMIT $limit");
+    $result = $db->sql("SELECT * FROM $tableName ORDER BY LENGTH(name),name LIMIT $offset,$limit");
     $response = [
       'columns' => $columns,
       'rows' => $result

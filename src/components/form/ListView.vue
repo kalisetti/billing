@@ -42,20 +42,27 @@
 
         <footer>
             <nav class="mt-3" aria-label="Page navigation">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item" :class="{ active: pageSize === 5 }" @click="changePageSize(5)">
-                        <!-- <a class="page-link" href="#">5</a> -->
-                        <span class="page-link">5</span>
-                    </li>
-                    <li class="page-item" :class="{ active: pageSize === 10 }" @click="changePageSize(10)">
-                        <!-- <a class="page-link" href="#">10</a> -->
-                        <span class="page-link">10</span>
-                    </li>
-                    <li class="page-item" :class="{ active: pageSize === 15 }" @click="changePageSize(15)">
-                        <!-- <a class="page-link" href="#">15</a> -->
-                        <span class="page-link">15</span>
-                    </li>
-                </ul>
+                <div class="d-flex justify-content-start">
+                    <ul class="pagination">
+                        <li class="page-item" :class="{ active: pageSize === 5 }" @click="changePageSize(5)">
+                            <!-- <a class="page-link" href="#">5</a> -->
+                            <span class="page-link">5</span>
+                        </li>
+                        <li class="page-item" :class="{ active: pageSize === 10 }" @click="changePageSize(10)">
+                            <!-- <a class="page-link" href="#">10</a> -->
+                            <span class="page-link">10</span>
+                        </li>
+                        <li class="page-item" :class="{ active: pageSize === 15 }" @click="changePageSize(15)">
+                            <!-- <a class="page-link" href="#">15</a> -->
+                            <span class="page-link">15</span>
+                        </li>
+                    </ul>
+                    <ul class="pagination ms-auto">
+                        <li class="page-item" @click="loadMore">
+                            <span class="page-link">More</span>
+                        </li>
+                    </ul>
+                </div>
             </nav>
         </footer>
     </div>
@@ -72,6 +79,7 @@ export default {
             columns: [],
             rows: [],
             pageSize: 5,
+            offset: 0,
             isLoading: false,
         }
     },
@@ -82,11 +90,12 @@ export default {
     methods: {
         fetchData() {
             this.isLoading = true;
+            console.log(`ListView.fetchDate: limit ${this.pageSize} offset ${this.offset}`);
             // Make an API call to fetch the data from the specified table
-            axios.get(`/api/fetchData.php?table=${this.tableName}&limit=${this.pageSize}`)
+            axios.get(`/api/fetchData.php?table=${this.tableName}&limit=${this.pageSize}&offset=${this.offset}`)
                 .then((response) => {
                     this.columns = response.data.columns;
-                    this.rows = response.data.rows;
+                    this.rows.push.apply(this.rows, response.data.rows);
                 })
                 .catch((error) => {
                     console.error('Error fetching data: ', error);
@@ -97,6 +106,10 @@ export default {
         },
         refreshData() {
             // Refresh the data by making another API call
+            if (this.offset) {
+                this.pageSize += this.offset;
+                this.offset = 0;
+            }
             this.fetchData();
         },
         createNewRecord() {
@@ -110,13 +123,21 @@ export default {
         },
         changePageSize(size) {
             console.log('changePagesize: ', size);
+            this.offset = 0;
             this.pageSize = size;
             this.fetchData();
         },
+        loadMore() {
+            this.offset += this.pageSize;
+            this.fetchData();
+        }
     },
     watch: {
       tableName(newId) {
-        console.log('newId', newId);
+        console.log('ListView.watch.newId: ', newId);
+        this.rows = [];
+        this.columns = [];
+        this.offset = 0;
         this.fetchData();
       }
     }
