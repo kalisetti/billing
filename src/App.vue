@@ -29,7 +29,9 @@ export default {
               this.$router.push('/desk');
             }
           } else {
-            this.$router.push('/login');
+            if (this.$route.path !== "/register") {
+              this.$router.push('/login');
+            }
           }
         })
         .catch((error) => {
