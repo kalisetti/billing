@@ -1,10 +1,12 @@
 <?php
 require_once 'App/Database/DB.php';
+require_once 'App/Utils/utils.php';
 
 use App\Database\DB;
+use App\Utils;
 
 // Get the table name from the query parameter
-$tableName = $_GET['table'];
+$tableName = Utils\scrub($_GET['table']);
 $limit = $_GET['limit'];
 $offset = $_GET['offset'];
 
