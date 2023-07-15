@@ -1,6 +1,6 @@
 <?php
 require_once 'App/Database/DB.php';
-require_once 'App/Utils/requestParser.php';
+require_once 'App/Utils/utils.php';
 
 use App\Database\DB;
 use App\Utils;
