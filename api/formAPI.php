@@ -63,6 +63,8 @@ function generateID($tableName) {
     $id = 'name';
     if ($tableName === 'subscription_plan') {
         $id = 'plan_name';
+    } elseif ($tableName === 'customers') {
+        $id = 'customer_name';
     }
     return $id;
 }
@@ -86,7 +88,7 @@ function constructStatement($tableName, $payload) {
         $valuePlaceholdersString = implode(', ', $valuePlaceholders);
         $valuePlaceholdersString = '?, ' . $valuePlaceholdersString;
         $statement = "INSERT INTO $tableName ($columnString) VALUES ($valuePlaceholdersString)";
-        $id = $payload['plan_name'];
+        $id = $payload[generateID($tableName)];
         array_unshift($values, $id);
     }
 
