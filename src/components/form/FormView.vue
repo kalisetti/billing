@@ -7,62 +7,81 @@
             </div>
             <div id="form-actions">
                 <button v-if="isNewRecord || hasUnsavedChanges" class="btn btn-primary" @click="saveRecord">Save</button>
-                <button v-if="isDraft" class="btn btn-primary" @click="submitRecord">Submit</button>
-                <button v-if="isSubmitted" class="btn btn-primary" @click="cancelRecord">Cancel</button>
-                <button v-if="isCancelled" class="btn btn-danger" @click="deleteRecord">Delete</button>
+                <button v-if="isDraft && !hasUnsavedChanges" class="btn btn-primary" @click="submitRecord">Submit</button>
+                <button v-if="isSubmitted && !hasUnsavedChanges" class="btn btn-primary" @click="cancelRecord">Cancel</button>
+                <button v-if="isCancelled && !hasUnsavedChanges" class="btn btn-danger" @click="deleteRecord">Delete</button>
             </div>
         </div>
         
         <!-- form-section -->
-        <div id="form-section">
-            <!-- Input elements for all the columns except the common columns -->
-            <template v-for="column in tableColumns" :key="column">
-                <div class="form-group">
-                    <label :for="column">{{ column }}</label>
-                    <input :id="column" class="form-control" v-model="recordData[column]" type="text" :readonly="isSubmitted">
-                </div>
-            </template>
+        <div id="form-body">
+            <!-- <subscription-plan 
+                v-if="tableName === 'subscription-plan'"
+                :record-data="computedRecordData"
+                @input-change="handleFormInputChange">
+            </subscription-plan> -->
         </div>
 
         <!-- form-comments -->
-        <div id="form-comments">
-            <div id="post-comments">
-                <textarea v-model="commentInput" rows="3" cols="50"></textarea>
-                <button clas="btn btn-primary" @click="postComment">Post</button>
-            </div>
-            <div id="view-comments">
-                <div v-for="comment in comments" :key="comment.name" class="comment">{{ comment.text }}</div>
-            </div>
-        </div>
+        <form-comments></form-comments>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
+// import SubscriptionPlan  from '/src/components/SubscriptionPlan.vue';
+import FormComments from '/src/components/form/FormComments.vue';
 
 export default {
     name: "FormView",
+    components: {
+        // 'subscription-plan': SubscriptionPlan,
+        'form-comments': FormComments,
+    },
     data() {
         return {
             recordId: null,
             tableName: null,
-            recordData: {},
+            recordData: {
+                docstatus: 0,
+            },
+            oldData: {},
             commentInput: '',
-            comments: []
+            comments: [],
+            newRecord: true,
         };
     },
     computed: {
+        computedRecordData() {
+            return { ...this.recordData };
+        },
         tableColumns() {
             const commonColumns = ['name', 'created_by', 'created_on', 'modified_by', 'modified_on', 'docstatus'];
             const columns = Object.keys(this.recordData);
             return columns.filter((column) => !commonColumns.includes(column));
         },
         isNewRecord() {
-            return this.recordId.startsWith('new-');
+            return this.newRecord;
         },
         hasUnsavedChanges() {
             // Check if there are unsaved changes in the form
             // Return true if there are unsaved changes, false otherwise
+            const newRecordKeys = Object.keys(this.recordData);
+            const oldRecordKeys = Object.keys(this.oldData);
+
+            if (newRecordKeys.length !== oldRecordKeys.length) {
+                return true;
+            } else {
+                for (let key of newRecordKeys) {
+                    if (!oldRecordKeys.includes(key)) {
+                        return true;
+                    } else {
+                        if (this.recordData[key] !== this.oldData[key]) {
+                            return true;
+                        }
+                    }
+                }
+            }
             return false;
         },
         isDraft() {
@@ -76,21 +95,30 @@ export default {
         }
     },
     created() {
-        console.log('***FormView.created');
+        console.log('***FormView.created: ', this.recordData);
         this.recordId = this.$route.params.recordId;
         this.tableName = this.$route.params.tableName;
         this.fetchRecordData();
         this.fetchComments();
     },
     methods: {
+        handleFormInputChange(updatedData) {
+            console.log(">>>handleFormInputChange***");
+            // this.recordData = { ...this.recordData, ...updatedData};
+            this.recordData = { ...updatedData};
+        },
         fetchRecordData() {
             console.log('***FormView.methods.fetchRecordData');
             // Make an API call to fetch record data based on recordId and tableName
-            // axios.get(`/api/fetchRecord.php?table=${this.tableName}&recordId=${this.recordId}`)
             axios.get(`/api/formAPI.php?table=${this.tableName}&recordId=${this.recordId}`)
                 .then((response) => {
-                    this.recordData = (response.data.rows ? response.data.rows[0] : []);
-                    console.log('this.recordData',this.recordData);
+                    const results = (response.data.rows ? response.data.rows[0] : []);
+                    if (results) {
+                        this.recordData = results;
+                        this.newRecord = false;
+                        this.oldData = { ...this.recordData };
+                    }
+                    console.log('>>>this.recordData', this.recordData);
                 })
                 .catch((error) => {
                     console.error('Error fetching record data: ', error);
@@ -98,7 +126,6 @@ export default {
         },
         fetchComments() {
             // Make an API call to fetch comments for the current record
-            // axios.get(`/api/fetchComments.php?table=${this.tableName}&recordId=${this.recordId}`)
             axios.get(`/api/formAPI.php?table=comments&recordId=${this.recordId}`)
                 .then((response) => {
                     this.comments = response.data.rows;
@@ -108,9 +135,20 @@ export default {
                     console.error('Error fetching comments: ', error);
                 });
         },
+        // getFormData() {
+        //     const inputFields = document.querySelectorAll('[data-fieldname]');
+        //     let formData = {};
+        //     inputFields.forEach((input) => {
+        //         formData[input.dataset.fieldname] = input.value;
+        //     });
+        //     return formData;
+        // },
         saveRecord() {
+            console.log('***FormView.methods.saveRecord');
+            // this.recordData = this.getFormData();
+            // console.log('this.recordDate: ', this.recordData);
             // Make an API call to save the record data
-            axios.post(`/api/saveRecord.php?table=${this.tableName}&recordId=${this.recordId}`, this.recordData)
+            axios.post(`/api/formAPI.php?table=${this.tableName}&recordId=${this.recordId}`, this.recordData)
                 .then(() => {
                     this.fetchRecordData(); // Fetch the updated record data
                 })
@@ -167,6 +205,17 @@ export default {
                 });
         }
     },
+    provide() {
+        return {
+            postComment: this.postComment,
+            comments: this.comments
+        }
+    },
+    watch: {
+        recordData(newData) {
+            console.log('watch ===> recordData: ', newData);
+        }
+    }
     // watch: {
     //   tableName(newId) {
     //     console.log('**FormView.watch.tableName: ', newId);
@@ -184,10 +233,18 @@ export default {
 }
 </script>
 
-<style scoped>
-.comment {
-    margin-bottom: 10px;
-    padding: 5px;
-    border: 1px solid #ccc;
+<style>
+#form-body {
+    min-height: 500px;
+}
+
+.form-group {
+    margin: 0.5rem 0;
+}
+
+
+
+.pull-right {
+    float: right;
 }
 </style>
