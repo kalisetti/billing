@@ -23,6 +23,29 @@
                 >Customers</router-link
               >
             </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Subscription
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li>
+                  <router-link class="dropdown-item" to="/desk/List/subscription-plan">
+                    Subscription Plan
+                  </router-link>
+                </li>
+                <li>
+                  <router-link class="dropdown-item" to="/desk/List/subscription">
+                    Subscription
+                  </router-link>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <router-link class="dropdown-item" to="/desk/List/subscription-settings">
+                    Settings
+                  </router-link>
+                </li>
+              </ul>
+            </li>
             <li class="nav-item">
               <router-link class="nav-link" to="/desk/List/invoices"
                 >Invoices</router-link

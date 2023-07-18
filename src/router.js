@@ -8,6 +8,7 @@ import FormView from './components/form/FormView.vue';
 import ListView from './components/form/ListView.vue';
 import NotFound from './pages/NotFound.vue';
 import DeskPage from './pages/DeskPage.vue';
+import SubscriptionPlan from './components/form/SubscriptionPlan.vue';
 
 const routes = [
   { path: '/', redirect: '/login'},
@@ -29,11 +30,17 @@ const routes = [
             props: true,
         },
         {
-          path: 'Edit/:tableName/:recordId',
-          name: 'edit',
-          component: FormView,
+          path: 'Edit/subscription-plan/:recordId',
+          name: 'subscription-plan',
+          component: SubscriptionPlan,
           props: true,
-      }
+        },
+        // {
+        //   path: 'Edit/:tableName/:recordId',
+        //   name: 'edit',
+        //   component: FormView,
+        //   props: true,
+        // }
     ] 
   },
   { path: '/logout', name: 'logout', component: LogoutPage},
