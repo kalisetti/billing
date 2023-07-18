@@ -19,7 +19,7 @@
                 <div class="col">
                     <div class="form-group">
                     <label for="plan-name">Plan Name</label>
-                    <input type="text" id="plan-name" data-fieldname="plan_name" class="form-control" 
+                    <input type="text" id="plan-name" class="form-control" 
                         v-model="recordData['plan_name']" 
                         required
                         >
@@ -28,7 +28,7 @@
                 <div class="col">
                     <div class="form-group">
                     <label for="billing-interval">Billing Interval</label>
-                    <select id="billing-interval"  data-fieldname="billing_interval" class="form-select" aria-label="Billing Interval" 
+                    <select id="billing-interval" class="form-select" aria-label="Billing Interval" 
                         v-model="recordData['billing_interval']"
                         >
                         <option selected>Month</option>
@@ -37,7 +37,7 @@
                     </div>
                     <div class="form-group">
                     <label for="cost">Cost</label>
-                    <input type="number" class="form-control" data-fieldname="cost" step="0.01" 
+                    <input type="number" class="form-control" 
                         v-model="recordData['cost']"
                         required
                         >
