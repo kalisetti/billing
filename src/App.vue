@@ -1,6 +1,6 @@
 <template>
   <div>
-    <base-page></base-page>
+    <base-page :isUserLoggedIn="this.isUserLoggedIn"></base-page>
   </div>
 </template>
 
@@ -11,6 +11,11 @@ import BasePage from './pages/BasePage.vue';
 export default {
   name: "App",
   components: { BasePage },
+  data() {
+    return {
+      isUserLoggedIn: false
+    }
+  },
   created() {
     console.log('App.vue: created step1...');
     this.checkAuthentication();
@@ -24,17 +29,19 @@ export default {
           if (response.data.loggedIn) {
             // User is already logged in, redirect to the desk page
             console.log('response.data.loggedIn', response.data.loggedIn);
-
+            this.isUserLoggedIn = true;
             if (this.$route.path === "/login") {
               this.$router.push('/desk');
             }
           } else {
+            this.isUserLoggedIn = false;
             if (this.$route.path !== "/register") {
               this.$router.push('/login');
             }
           }
         })
         .catch((error) => {
+          this.isUserLoggedIn = false;
           console.log("Error checking authentication status:", error);
         });
     },
@@ -58,7 +65,8 @@ export default {
   },
   provide() {
     return {
-      logout: this.logout
+      logout: this.logout,
+      // isUserLoggedIn: this.isUserLoggedIn,
     }
   }
 };

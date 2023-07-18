@@ -2,7 +2,7 @@
     <div>
         <header>
             <page-header></page-header>
-            <nav-bar></nav-bar>
+            <nav-bar v-if="isUserLoggedIn"></nav-bar>
         </header>
         <main>
             <router-view id="main"></router-view>
@@ -21,6 +21,8 @@ import NavBar from './navigation/NavBar.vue';
 export default {
     name: "BasePage",
     components: { PageHeader, PageFooter, NavBar },
+    props: ['isUserLoggedIn']
+    // inject: ['isUserLoggedIn']
 };
 </script>
 
