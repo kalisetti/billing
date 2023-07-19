@@ -68,6 +68,29 @@
             </li>
           </ul>
         </div>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto"> <!-- "ms-auto" class aligns items to the right -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="settingsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Settings
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="settingsDropdown"> <!-- "dropdown-menu-end" class aligns dropdown to the right -->
+                <li>
+                  <a class="dropdown-item" href="#">
+                    <i class="bi bi-person me-1"></i>
+                    My Profile
+                  </a>
+                </li>
+                <li>
+                  <router-link class="dropdown-item" to="/logout">
+                    <i class="bi bi-box-arrow-right me-1"></i>
+                    Logout
+                  </router-link>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
       </nav>
     </div>
   </template>
