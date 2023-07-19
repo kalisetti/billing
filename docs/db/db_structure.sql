@@ -98,7 +98,7 @@ CREATE TABLE subscription_plan(
 CREATE TABLE subscription(
 	name VARCHAR(140) NOT NULL PRIMARY KEY,
 	customer VARCHAR(140),
-	subscription VARCHAR(140),
+	subscription_plan VARCHAR(140),
 	subscription_start DATE DEFAULT CURRENT_DATE,
 	subscription_end DATE,
 	status 	VARCHAR(140) DEFAULT 'Active',

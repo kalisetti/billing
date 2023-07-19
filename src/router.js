@@ -10,6 +10,7 @@ import NotFound from './pages/NotFound.vue';
 import DeskPage from './pages/DeskPage.vue';
 import SubscriptionPlan from './components/form/SubscriptionPlan.vue';
 import CustomerForm from './components/form/CustomerForm.vue';
+import SubscriptionForm from './components/form/SubscriptionForm.vue';
 
 const routes = [
   { path: '/', redirect: '/login'},
@@ -31,15 +32,21 @@ const routes = [
             props: true,
         },
         {
+          path: 'Edit/subscription-plan/:recordId',
+          name: 'subscription-plan',
+          component: SubscriptionPlan,
+          props: true,
+        },
+        {
           path: 'Edit/customers/:recordId',
           name: 'customers',
           component: CustomerForm,
           props: true,
         },
         {
-          path: 'Edit/subscription-plan/:recordId',
-          name: 'subscription-plan',
-          component: SubscriptionPlan,
+          path: 'Edit/subscription/:recordId',
+          name: 'subscription',
+          component: SubscriptionForm,
           props: true,
         },
         // {
