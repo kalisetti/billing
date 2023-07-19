@@ -32,7 +32,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="row in rows" :key="row.name" @click="editRecord(row)">
+                        <tr class="gridRow" v-for="row in rows" :key="row.name" @click="editRecord(row)">
                             <td v-for="column in columns" :key="column">{{ row[column] }}</td>
                         </tr>
                     </tbody>
@@ -176,5 +176,10 @@ table {
 
 thead {
     background-color: #b0c4de;
+}
+
+.gridRow:hover {
+    cursor: pointer;
+    background-color:darkkhaki;
 }
 </style>

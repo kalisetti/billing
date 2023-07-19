@@ -295,21 +295,3 @@ export default {
     }
 }
 </script>
-
-<style>
-/* #form-body {
-    min-height: 500px;
-}
-
-.form-group {
-    margin: 0.5rem 0;
-}
-
-.pull-right {
-    float: right;
-}
-
-.awesomplete {
-    width: 100%;
-} */
-</style>
