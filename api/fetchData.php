@@ -9,6 +9,11 @@ use App\Utils;
 $tableName = Utils\scrub($_GET['table']);
 $limit = $_GET['limit'];
 $offset = $_GET['offset'];
+$query = '';
+
+if (isset($_GET['query'])) {
+  $query = "WHERE name LIKE '%$query%'";
+}
 
 $columns = [];
 $rows = [];
@@ -19,7 +24,7 @@ try {
     $columns = $db->getColumns($tableName);
 
     // Fetch the rows from the table
-    $result = $db->sql("SELECT * FROM $tableName ORDER BY LENGTH(name),name LIMIT $offset,$limit");
+    $result = $db->sql("SELECT * FROM $tableName $query ORDER BY LENGTH(name),name LIMIT $offset,$limit");
     $response = [
       'columns' => $columns,
       'rows' => $result
