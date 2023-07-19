@@ -66,16 +66,11 @@ function generateID($db, $tableName, $payload) {
     } elseif ($tableName === 'customers') {
         $id = $payload['customer_name'];
     } elseif ($tableName === 'subscription') {
-        $series = 'SUB';
-        $rows = $db->sql("SELECT * FROM series WHERE name = '$series'");
-        $currentValue = 0;
-        if (!empty($rows)) {
-            $currentValue = $rows[0]['current'] + 1;
-            $db->sql("UPDATE series SET current = $currentValue WHERE name = '$series'");
-        } else {
-            $db->sql("INSERT INTO series(name, current) VALUES('$series', 0)");
-        }
-        $id = $series . str_pad($currentValue,5,"0",STR_PAD_LEFT);
+        $id = Utils\makeAutoName($db, 'SUB');
+    } elseif ($tableName === 'invoice_entry') {
+        $id = Utils\makeAutoName($db, 'INVE');
+    } elseif ($tableName === 'invoice') {
+        $id = Utils\makeAutoName($db, 'INVOICE');
     }
     return $id;
 }

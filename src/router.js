@@ -11,6 +11,7 @@ import DeskPage from './pages/DeskPage.vue';
 import SubscriptionPlan from './components/form/SubscriptionPlan.vue';
 import CustomerForm from './components/form/CustomerForm.vue';
 import SubscriptionForm from './components/form/SubscriptionForm.vue';
+import InvoiceEntry from './components/form/InvoiceEntry.vue';
 
 const routes = [
   { path: '/', redirect: '/login'},
@@ -47,6 +48,12 @@ const routes = [
           path: 'Edit/subscription/:recordId',
           name: 'subscription',
           component: SubscriptionForm,
+          props: true,
+        },
+        {
+          path: 'Edit/invoice-entry/:recordId',
+          name: 'invoice-entry',
+          component: InvoiceEntry,
           props: true,
         },
         // {

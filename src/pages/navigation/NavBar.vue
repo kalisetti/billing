@@ -46,10 +46,22 @@
                 </li>
               </ul>
             </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/desk/List/invoices"
-                >Invoices</router-link
-              >
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Invoices
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li>
+                  <router-link class="dropdown-item" to="/desk/List/invoice-entry">
+                    Invoice Entry
+                  </router-link>
+                </li>
+                <li>
+                  <router-link class="dropdown-item" to="/desk/List/invoice">
+                    Invoices
+                  </router-link>
+                </li>
+              </ul>
             </li>
             <li class="nav-item">
               <router-link class="nav-link" to="/desk/List/payments"

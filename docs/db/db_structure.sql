@@ -118,3 +118,40 @@ CREATE TABLE series(
  name VARCHAR(140) NOT NULL PRIMARY KEY,
  current INT(10)
 );
+
+--
+-- INVOICE ENTRY
+--
+
+CREATE TABLE invoice_entry(
+ name VARCHAR(140) NOT NULL PRIMARY KEY,
+ invoice_month VARCHAR(140),
+ total_invoice_count INT(10),
+ total_invoice_amount DECIMAL(10,2),
+ docstatus TINYINT(1) DEFAULT 0,
+ created_by  VARCHAR(140),
+ created_on  DATETIME DEFAULT CURRENT_TIMESTAMP,
+ modified_by VARCHAR(140),
+ modified_on DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+--
+-- INVOICE
+--
+
+CREATE TABLE invoice(
+	name VARCHAR(140) NOT NULL PRIMARY KEY,
+	customer VARCHAR(140),
+	subscription VARCHAR(140),
+	subscription_plan VARCHAR(140),
+	invoice_entry VARCHAR(140),
+	invoice_month VARCHAR(140),
+	amount DECIMAL(10,2),
+	paid DECIMAL(10,2),
+	outstanding DECIMAL(10,2),
+	docstatus TINYINT(1) DEFAULT 0,
+	created_by  VARCHAR(140),
+	created_on  DATETIME DEFAULT CURRENT_TIMESTAMP,
+	modified_by VARCHAR(140),
+	modified_on DATETIME DEFAULT CURRENT_TIMESTAMP
+);
