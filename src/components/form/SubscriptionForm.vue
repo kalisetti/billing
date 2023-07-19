@@ -18,7 +18,10 @@
             <div id="form-fields" class="row">
                 <div class="col">
                     <div class="form-group">
-                    <label for="customer">Customer Name</label>
+                    <label for="customer">
+                        Customer
+                        <i class="bi bi-link-45deg ms-1"></i>
+                    </label>
                     <input type="text" id="customer" class="form-control" 
                         v-model="recordData['customer']"
                         @focus="fetchCustomers"
@@ -29,7 +32,10 @@
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        <label for="subscription-plan">Subscription Plan</label>
+                        <label for="subscription-plan">
+                            Subscription Plan
+                            <i class="bi bi-link-45deg ms-1"></i>
+                        </label>
                         <input type="email" id="subscription-plan" class="form-control"
                             v-model="recordData['subscription_plan']"
                             @focus="fetchSubscriptionPlans"
