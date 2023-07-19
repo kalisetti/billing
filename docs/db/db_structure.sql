@@ -111,25 +111,10 @@ CREATE TABLE subscription(
 
 
 --
+-- SERIES
 --
---
-Service Type:
-House Rent
-Cable Services
 
-Service No:
-Flat#
-STB#
-
-Contract
-
-Charges
-
-Package
-Monthly/Annually
-
-Customer - Subscription(Package, Monthly)
-
-Subscription
-Package
-
+CREATE TABLE series(
+ name VARCHAR(140) NOT NULL PRIMARY KEY,
+ current INT(10)
+);

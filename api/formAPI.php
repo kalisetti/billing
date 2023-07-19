@@ -59,16 +59,27 @@ function getRecord($db, $tableName, $payload) {
     }
 }
 
-function generateID($tableName) {
+function generateID($db, $tableName, $payload) {
     $id = 'name';
     if ($tableName === 'subscription_plan') {
-        $id = 'plan_name';
+        $id = $payload['plan_name'];
     } elseif ($tableName === 'customers') {
-        $id = 'customer_name';
+        $id = $payload['customer_name'];
+    } elseif ($tableName === 'subscription') {
+        $series = 'SUB';
+        $rows = $db->sql("SELECT * FROM series WHERE name = '$series'");
+        $currentValue = 0;
+        if (!empty($rows)) {
+            $currentValue = $rows[0]['current'] + 1;
+            $db->sql("UPDATE series SET current = $currentValue WHERE name = '$series'");
+        } else {
+            $db->sql("INSERT INTO series(name, current) VALUES('$series', 0)");
+        }
+        $id = $series . str_pad($currentValue,5,"0",STR_PAD_LEFT);
     }
     return $id;
 }
-function constructStatement($tableName, $payload) {
+function constructStatement($db, $tableName, $payload) {
     $columns = array_keys($payload);
     $values = array_values($payload);
     $statement = '';
@@ -88,14 +99,14 @@ function constructStatement($tableName, $payload) {
         $valuePlaceholdersString = implode(', ', $valuePlaceholders);
         $valuePlaceholdersString = '?, ' . $valuePlaceholdersString;
         $statement = "INSERT INTO $tableName ($columnString) VALUES ($valuePlaceholdersString)";
-        $id = $payload[generateID($tableName)];
+        $id = generateID($db, $tableName, $payload);
         array_unshift($values, $id);
     }
 
     return [$columns, $values, $statement];
 }
 function saveRecord($db, $tableName, $payload) {
-    list($columns, $values, $statement) = constructStatement($tableName, $payload);
+    list($columns, $values, $statement) = constructStatement($db, $tableName, $payload);
 
     // Insert a new record into the database
     try {

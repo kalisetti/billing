@@ -48,7 +48,7 @@
                             v-model="recordData['status']"
                             required
                             >
-                            <option selected>Active</option>
+                            <option>Active</option>
                             <option>Inactive</option>
                         </select>
                     </div>
