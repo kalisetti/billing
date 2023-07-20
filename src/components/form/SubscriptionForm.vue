@@ -36,7 +36,7 @@
                             Subscription Plan
                             <i class="bi bi-link-45deg ms-1"></i>
                         </label>
-                        <input type="email" id="subscription-plan" class="form-control"
+                        <input type="text" id="subscription-plan" class="form-control"
                             v-model="recordData['subscription_plan']"
                             @focus="fetchSubscriptionPlans"
                             @input="fetchSubscriptionPlans"
