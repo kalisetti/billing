@@ -3,13 +3,13 @@
         <!-- form-toolbar -->
         <div id="form-toolbar">
             <div id="form-indicators">
-                <div v-if="isNewRecord || hasUnsavedChanges">Not Saved</div>
+                <div v-show="isNewRecord || hasUnsavedChanges">Not Saved</div>
             </div>
             <div id="form-actions">
-                <button v-if="isNewRecord || hasUnsavedChanges" class="btn btn-primary" @click="saveRecord">Save</button>
-                <button v-if="isDraft && !hasUnsavedChanges && isSubmittable" class="btn btn-primary" @click="submitRecord">Submit</button>
-                <button v-if="isSubmitted && !hasUnsavedChanges && isSubmittable" class="btn btn-primary" @click="cancelRecord">Cancel</button>
-                <button v-if="isCancelled && !hasUnsavedChanges && isSubmittable" class="btn btn-danger" @click="deleteRecord">Delete</button>
+                <button v-show="isNewRecord || hasUnsavedChanges" class="btn btn-primary" @click="saveRecord">Save</button>
+                <button v-show="isDraft && !hasUnsavedChanges && isSubmittable" class="btn btn-primary" @click="submitRecord">Submit</button>
+                <button v-show="isSubmitted && !hasUnsavedChanges && isSubmittable" class="btn btn-primary" @click="cancelRecord">Cancel</button>
+                <button v-show="isCancelled && !hasUnsavedChanges && isSubmittable" class="btn btn-danger" @click="deleteRecord">Delete</button>
             </div>
         </div>
         
@@ -161,7 +161,7 @@ export default {
                 });
         },
         fetchSubscriptionPlans() {
-            const inputValue = this.recordData['customer'];
+            const inputValue = this.recordData['subscription-plan'];
             axios.get(`/api/fetchData.php?table=subscription-plan&query=${inputValue}&limit=20&offset=0`)
                 .then((response) => {
                     // this.columns = response.data.columns;
