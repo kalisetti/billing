@@ -24,7 +24,7 @@
             </div>
 
             <div class="table-responsive">
-                <table class="table table-striped">
+                <table class="table table-hover">
                     <caption>List view results for table {{ tableName }}</caption>
                     <thead>
                         <tr>
