@@ -70,7 +70,9 @@ function generateID($db, $tableName, $payload) {
     } elseif ($tableName === 'invoice_entry') {
         $id = Utils\makeAutoName($db, 'INVE');
     } elseif ($tableName === 'invoice') {
-        $id = Utils\makeAutoName($db, 'INVOICE');
+        $id = Utils\makeAutoName($db, 'INV');
+    } elseif ($tableName === 'payment') {
+        $id = Utils\makeAutoName($db, 'PAY');
     }
     return $id;
 }
