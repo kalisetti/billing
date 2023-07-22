@@ -24,7 +24,7 @@ try {
     $columns = $db->getColumns($tableName);
 
     // Fetch the rows from the table
-    $result = $db->sql("SELECT * FROM $tableName $query ORDER BY LENGTH(name),name LIMIT $offset,$limit");
+    $result = $db->sql("SELECT * FROM $tableName $query ORDER BY modified_on DESC LIMIT $offset,$limit");
     $response = [
       'columns' => $columns,
       'rows' => $result
