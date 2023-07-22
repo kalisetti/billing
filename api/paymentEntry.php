@@ -75,6 +75,8 @@ function generateID($db, $tableName, $payload) {
         $id = Utils\makeAutoName($db, 'INV');
     } elseif ($tableName === 'payment') {
         $id = Utils\makeAutoName($db, 'PAY');
+    } elseif ($tableName === 'payment_item') {
+        $id = Utils\makeAutoName($db, 'PAYI');
     }
     return $id;
 }
@@ -114,9 +116,22 @@ function saveRecord($db, $tableName, $payload) {
 
     // Insert a new record into the database
     try {
-        $rows = $db->sql($statement, $values);
-        $result = getRecord($db, $tableName, $payload);
-        return $result;
+        $db->sql($statement, $values);
+        if (!isset($payload['name']) && !empty($items)){
+            foreach ($items as $row) {
+                $id = generateID($db, 'payment_item', $payload);
+                $db->sql("INSERT INTO payment_item(name, subscription, subscription_plan,
+                    invoice, invoice_month, invoice_amount,
+                    outstanding, paid_amount, parent)
+                    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", [$id, $row['subscription'], $row['subscription_plan'],
+                        $row['name'], $row['invoice_month'], $row['amount'],
+                        $row['outstanding'], $row['outstanding'], $name]);
+                $db->sql("UPDATE invoice SET paid = ?, outstanding = ? WHERE name = ?",
+                    [$row['outstanding'], 0, $row['name']]);
+            }
+        }
+
+        return getRecord($db, $tableName, $payload);
     } catch (Exception $e) {
         return array(
             'success' => false,
