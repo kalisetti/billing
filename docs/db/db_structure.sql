@@ -155,3 +155,41 @@ CREATE TABLE invoice(
 	modified_by VARCHAR(140),
 	modified_on DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+--
+-- PAYMENT
+--
+
+CREATE TABLE payment(
+	name VARCHAR(140) NOT NULL PRIMARY KEY,
+	customer VARCHAR(140),
+	payment_date DATE,
+	total_outstanding DECIMAL(10,2),
+	paid_amount DECIMAL(10,2),
+	balance_amount DECIMAL(10,2),
+	mode_of_payment VARCHAR(140),
+	payment_reference VARCHAR(140),
+	docstatus TINYINT(1) DEFAULT 0,
+	created_by  VARCHAR(140),
+	created_on  DATETIME DEFAULT CURRENT_TIMESTAMP,
+	modified_by VARCHAR(140),
+	modified_on DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE payment_item(
+	name VARCHAR(140) NOT NULL PRIMARY KEY,
+	subscription VARCHAR(140),
+	subscription_plan VARCHAR(140),
+	invoice VARCHAR(140),
+	invoice_month VARCHAR(140),
+	invoice_amount DECIMAL(10,2),
+	outstanding DECIMAL(10,2),
+	paid_amount DECIMAL(10,2),
+	payment_date DATE,
+	parent VARCHAR(140),
+	docstatus TINYINT(1) DEFAULT 0,
+	created_by  VARCHAR(140),
+	created_on  DATETIME DEFAULT CURRENT_TIMESTAMP,
+	modified_by VARCHAR(140),
+	modified_on DATETIME DEFAULT CURRENT_TIMESTAMP
+);
