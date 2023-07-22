@@ -126,7 +126,7 @@ import FormComments from '/src/components/form/FormComments.vue';
 
 
 export default {
-    name: "PaymentForm",
+    name: "PaymentEntry",
     components: {
         'form-comments': FormComments,
     },
@@ -274,7 +274,7 @@ export default {
         fetchRecordData() {
             console.log('***PaymentForm.methods.fetchRecordData');
             // Make an API call to fetch record data based on recordId and tableName
-            axios.get(`/api/formAPI.php?table=${this.tableName}&recordId=${this.recordId}`)
+            axios.get(`/api/paymentEntry.php?table=${this.tableName}&recordId=${this.recordId}`)
                 .then((response) => {
                     const results = (response.data.rows ? response.data.rows[0] : []);
                     if (results) {
@@ -302,7 +302,7 @@ export default {
         saveRecord() {
             console.log('***PaymentForm.methods.saveRecord: ', this.recordData);
             // Make an API call to save the record data
-            axios.post(`/api/paymentForm.php?table=${this.tableName}&recordId=${this.recordId}`, this.recordData)
+            axios.post(`/api/paymentEntry.php?table=${this.tableName}&recordId=${this.recordId}`, this.recordData)
                 .then((response) => {
                     // this.fetchRecordData(); // Fetch the updated record data
                     console.log('abababababa: ', response);

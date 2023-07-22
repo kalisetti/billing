@@ -12,7 +12,7 @@ import SubscriptionPlan from './components/form/SubscriptionPlan.vue';
 import CustomerForm from './components/form/CustomerForm.vue';
 import SubscriptionForm from './components/form/SubscriptionForm.vue';
 import InvoiceEntry from './components/form/InvoiceEntry.vue';
-import PaymentForm from './components/form/PaymentForm.vue';
+import PaymentEntry from './components/form/PaymentEntry.vue';
 
 const routes = [
   { path: '/', redirect: '/login'},
@@ -60,7 +60,7 @@ const routes = [
         {
           path: 'Edit/payment/:recordId',
           name: 'payment',
-          component: PaymentForm,
+          component: PaymentEntry,
           props: true,
         },
         // {
