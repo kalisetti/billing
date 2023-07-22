@@ -232,8 +232,11 @@ export default {
             console.log('***SubscriptionPlan.methods.saveRecord: ', this.recordData);
             // Make an API call to save the record data
             axios.post(`/api/formAPI.php?table=${this.tableName}&recordId=${this.recordId}`, this.recordData)
-                .then(() => {
-                    this.fetchRecordData(); // Fetch the updated record data
+                .then((response) => {
+                    // this.fetchRecordData(); // Fetch the updated record data
+                    if (response.data.rows) {
+                        this.$router.push(`/desk/Edit/${this.tableName}/${response.data.rows[0].name}`);
+                    }
                 })
                 .catch((error) => {
                     console.error('Error saving record: ', error);

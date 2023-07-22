@@ -89,6 +89,7 @@ function constructStatement($db, $tableName, $payload) {
         $columnPlaceholdersString = implode(', ', $columnPlaceholders);
         $statement = "UPDATE $tableName SET $columnPlaceholdersString WHERE name=?";
         $values[] = $payload['name'];
+        $id = $payload['name'];
     } else {
         $columnString = implode(', ', $columns);
         $columnString = 'name, ' . $columnString;
@@ -100,21 +101,15 @@ function constructStatement($db, $tableName, $payload) {
         array_unshift($values, $id);
     }
 
-    return [$columns, $values, $statement];
+    return [$columns, $values, $statement, $id];
 }
 function saveRecord($db, $tableName, $payload) {
-    list($columns, $values, $statement) = constructStatement($db, $tableName, $payload);
-
+    list($columns, $values, $statement, $name) = constructStatement($db, $tableName, $payload);
+    $payload['recordId'] = $name;
     // Insert a new record into the database
     try {
         $rows = $db->sql($statement, $values);
-
-        return array(
-            'success' => true,
-            'error' => '',
-            'message' => '',
-            'rows' => $rows
-        );
+        return getRecord($db, $tableName, $payload);
     } catch (Exception $e) {
         return array(
             'success' => false,

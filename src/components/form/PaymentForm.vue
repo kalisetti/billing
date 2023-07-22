@@ -306,6 +306,7 @@ export default {
                 .then((response) => {
                     // this.fetchRecordData(); // Fetch the updated record data
                     console.log('abababababa: ', response);
+                    this.$router.push(`/desk/Edit/${this.tableName}/${response.data.rows[0].name}`);
                 })
                 .catch((error) => {
                     console.error('Error saving record: ', error);

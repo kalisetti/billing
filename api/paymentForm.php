@@ -111,17 +111,12 @@ function saveRecord($db, $tableName, $payload) {
 
     list($columns, $values, $statement, $name) = constructStatement($db, $tableName, $payload);
     $payload['recordId'] = $name;
-    
+
     // Insert a new record into the database
     try {
         $rows = $db->sql($statement, $values);
         $result = getRecord($db, $tableName, $payload);
-        return array(
-            'success' => true,
-            'error' => '',
-            'message' => '',
-            'rows' => $result
-        );
+        return $result;
     } catch (Exception $e) {
         return array(
             'success' => false,
