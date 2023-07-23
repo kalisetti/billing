@@ -1,17 +1,20 @@
 /* eslint-disable no-unused-vars */
+// Load views
 import { createRouter, createWebHistory } from 'vue-router';
+import DeskView from './components/views/DeskView.vue';
+import ListView from './components/views/ListView.vue';
+// Load forms
 import LoginForm from './components/forms/LoginForm.vue';
 import RegistrationForm from './components/forms/RegistrationForm.vue';
-import DeskView from './components/DeskView.vue';
 import LogoutForm from './components/forms/LogoutForm.vue';
 import FormView from './components/forms/FormView.vue';
-import ListView from './components/forms/ListView.vue';
-import NotFound from './components/pages/NotFound.vue';
 import SubscriptionPlan from './components/forms/SubscriptionPlan.vue';
 import CustomerForm from './components/forms/CustomerForm.vue';
 import SubscriptionForm from './components/forms/SubscriptionForm.vue';
 import InvoiceEntry from './components/forms/InvoiceEntry.vue';
 import PaymentEntry from './components/forms/PaymentEntry.vue';
+// Load pages
+import NotFound from './components/pages/NotFound.vue';
 
 const routes = [
   { path: '/', redirect: '/login'},
