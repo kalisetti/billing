@@ -6,7 +6,7 @@
 
 <script>
 import axios from "axios";
-import BasePage from './pages/BasePage.vue';
+import BasePage from './components/pages/BasePage.vue';
 
 export default {
   name: "App",
