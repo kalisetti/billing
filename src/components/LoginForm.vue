@@ -1,7 +1,7 @@
 <template>
   <base-card>
     <div class="container">
-      <h2 class="mt-5">Login</h2>
+      <h3 class="text-center">Login</h3>
       <form @submit.prevent="login" class="mt-4">
         <div class="form-group">
           <label for="email">Email:</label>
@@ -12,6 +12,7 @@
           <input type="password" id="password" v-model="password" class="form-control" autocomplete="off" required>
         </div>
         <button type="submit" class="btn btn-primary">Login</button>
+        <h6 class="text-end" ><router-link to="/register">Create new account</router-link></h6>
       </form>
 
       <base-dialog v-if="msgprint" title="Something" @close="confirmError">

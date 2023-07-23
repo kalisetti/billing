@@ -5,7 +5,7 @@
             <nav-bar v-if="isUserLoggedIn"></nav-bar>
         </header>
         <main>
-            <router-view id="main"></router-view>
+            <router-view></router-view>
         </main>
         <footer>
             <page-footer></page-footer>
@@ -30,9 +30,6 @@ export default {
 main {
     min-height: 500px;
     font-size: 0.95rem;
-}
-
-#main {
-    margin: 1rem;
+    padding: 1rem;
 }
 </style>
