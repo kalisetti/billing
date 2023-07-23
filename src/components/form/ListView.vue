@@ -44,17 +44,17 @@
             <nav class="mt-3" aria-label="Page navigation">
                 <div class="d-flex justify-content-start">
                     <ul class="pagination">
-                        <li class="page-item" :class="{ active: pageSize === 5 }" @click="changePageSize(5)">
+                        <li class="page-item" :class="{ active: pageSize === 20 }" @click="changePageSize(20)">
                             <!-- <a class="page-link" href="#">5</a> -->
-                            <span class="page-link">5</span>
+                            <span class="page-link">20</span>
                         </li>
-                        <li class="page-item" :class="{ active: pageSize === 10 }" @click="changePageSize(10)">
+                        <li class="page-item" :class="{ active: pageSize === 100 }" @click="changePageSize(100)">
                             <!-- <a class="page-link" href="#">10</a> -->
-                            <span class="page-link">10</span>
+                            <span class="page-link">100</span>
                         </li>
-                        <li class="page-item" :class="{ active: pageSize === 15 }" @click="changePageSize(15)">
+                        <li class="page-item" :class="{ active: pageSize === 200 }" @click="changePageSize(200)">
                             <!-- <a class="page-link" href="#">15</a> -->
-                            <span class="page-link">15</span>
+                            <span class="page-link">200</span>
                         </li>
                     </ul>
                     <ul class="pagination ms-auto">
@@ -78,7 +78,7 @@ export default {
         return {
             columns: [],
             rows: [],
-            pageSize: 5,
+            pageSize: 20,
             offset: 0,
             isLoading: false,
         }
