@@ -7,64 +7,19 @@
             </div>
             <div class="form-actions">
                 <button v-if="isNewRecord || hasUnsavedChanges" class="btn btn-sm btn-primary ms-2" @click="saveRecord">Save</button>
-                <button v-if="isDraft && !hasUnsavedChanges && isSubmittable" class="btn btn-sm btn-primary ms-2" @click="submitRecord">Submit</button>
-                <button v-if="isSubmitted && !hasUnsavedChanges && isSubmittable" class="btn btn-sm btn-primary ms-2" @click="cancelRecord">Cancel</button>
-                <button v-if="isCancelled && !hasUnsavedChanges && isSubmittable" class="btn btn-sm btn-danger ms-2" @click="deleteRecord">Delete</button>
+                <button v-if="isDraft && !hasUnsavedChanges" class="btn btn-sm btn-primary ms-2" @click="submitRecord">Submit</button>
+                <button v-if="isSubmitted && !hasUnsavedChanges" class="btn btn-sm btn-primary ms-2" @click="cancelRecord">Cancel</button>
+                <button v-if="isCancelled && !hasUnsavedChanges" class="btn btn-sm btn-danger ms-2" @click="deleteRecord">Delete</button>
             </div>
         </div>
         
         <!-- form-section -->
         <div id="form-body">
-            <div id="form-fields" class="row">
-                <div class="col">
-                    <div class="form-group">
-                    <label for="customer-name">Customer Name</label>
-                    <input type="text" id="customer-name" class="form-control" 
-                        v-model="recordData['customer_name']" 
-                        required
-                        >
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-group">
-                        <label for="email">Email ID</label>
-                        <input type="email" id="email" class="form-control"
-                            v-model="recordData['email']">
-                    </div>
-                    <div class="form-group">
-                        <label for="contact-no">Contact No</label>
-                        <input type="text" id="contact-no" class="form-control" 
-                            v-model="recordData['contact_no']"
-                            >
-                    </div>
-                </div>
-            </div>
-
-            <hr>
-            <h5>ADDRESS</h5>
-            <div class="row">
-                <div class="col">
-                    <div class="form-group">
-                        <label for="address1">Address Line 1</label>
-                        <input type="text" id="address1" class="form-control" 
-                            v-model="recordData['address1']"
-                            >
-                        </div>
-                    <div class="form-group">
-                        <label for="address2">Address Line 2</label>
-                        <input type="text" id="address2" class="form-control" 
-                            v-model="recordData['address2']"
-                            >
-                    </div>
-                    <div class="form-group">
-                        <label for="address3">Address Line 3</label>
-                        <input type="text" id="address3" class="form-control" 
-                            v-model="recordData['address3']"
-                            >
-                    </div>
-                </div>
-                <div class="col"></div>
-            </div>
+            <!-- <subscription-plan 
+                v-if="tableName === 'subscription-plan'"
+                :record-data="computedRecordData"
+                @input-change="handleFormInputChange">
+            </subscription-plan> -->
         </div>
 
         <!-- form-comments -->
@@ -74,17 +29,19 @@
 
 <script>
 import axios from 'axios';
-import FormComments from '/src/components/form/FormComments.vue';
+// import SubscriptionPlan  from '/src/components/SubscriptionPlan.vue';
+import FormComments from '/src/components/forms/FormComments.vue';
 
 export default {
-    name: "CustomerForm",
+    name: "FormView",
     components: {
+        // 'subscription-plan': SubscriptionPlan,
         'form-comments': FormComments,
     },
     data() {
         return {
             recordId: null,
-            tableName: 'customers',
+            tableName: null,
             recordData: {
                 docstatus: 0,
             },
@@ -92,10 +49,12 @@ export default {
             commentInput: '',
             comments: [],
             newRecord: true,
-            isSubmittable: false
         };
     },
     computed: {
+        computedRecordData() {
+            return { ...this.recordData };
+        },
         tableColumns() {
             const commonColumns = ['name', 'created_by', 'created_on', 'modified_by', 'modified_on', 'docstatus'];
             const columns = Object.keys(this.recordData);
@@ -136,15 +95,20 @@ export default {
         }
     },
     created() {
-        console.log('***SubscriptionPlan.created: ', this.recordData);
+        console.log('***FormView.created: ', this.recordData);
         this.recordId = this.$route.params.recordId;
-        // this.tableName = this.$route.params.tableName;
+        this.tableName = this.$route.params.tableName;
         this.fetchRecordData();
-        // this.fetchComments();
+        this.fetchComments();
     },
     methods: {
+        handleFormInputChange(updatedData) {
+            console.log(">>>handleFormInputChange***");
+            // this.recordData = { ...this.recordData, ...updatedData};
+            this.recordData = { ...updatedData};
+        },
         fetchRecordData() {
-            console.log('***SubscriptionPlan.methods.fetchRecordData');
+            console.log('***FormView.methods.fetchRecordData');
             // Make an API call to fetch record data based on recordId and tableName
             axios.get(`/api/formAPI.php?table=${this.tableName}&recordId=${this.recordId}`)
                 .then((response) => {
@@ -171,8 +135,18 @@ export default {
                     console.error('Error fetching comments: ', error);
                 });
         },
+        // getFormData() {
+        //     const inputFields = document.querySelectorAll('[data-fieldname]');
+        //     let formData = {};
+        //     inputFields.forEach((input) => {
+        //         formData[input.dataset.fieldname] = input.value;
+        //     });
+        //     return formData;
+        // },
         saveRecord() {
-            console.log('***SubscriptionPlan.methods.saveRecord: ', this.recordData);
+            console.log('***FormView.methods.saveRecord');
+            // this.recordData = this.getFormData();
+            // console.log('this.recordDate: ', this.recordData);
             // Make an API call to save the record data
             axios.post(`/api/formAPI.php?table=${this.tableName}&recordId=${this.recordId}`, this.recordData)
                 .then((response) => {
@@ -245,5 +219,20 @@ export default {
             console.log('watch ===> recordData: ', newData);
         }
     }
+    // watch: {
+    //   tableName(newId) {
+    //     console.log('**FormView.watch.tableName: ', newId);
+    //     this.recordId = this.$route.params.recordId;
+    //     this.tableName = this.$route.params.tableName;
+    //   },
+    //   recordId(newId) {
+    //     console.log('**FormView.watch.recordId: ', newId);
+    //     this.recordId = this.$route.params.recordId;
+    //     this.tableName = this.$route.params.tableName;
+    //     this.fetchRecordData();
+    //     this.fetchComments();
+    //   }
+    // }
 }
 </script>
+

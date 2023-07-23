@@ -61,7 +61,7 @@
 
 <script>
 import axios from 'axios';
-import FormComments from '/src/components/form/FormComments.vue';
+import FormComments from '/src/components/forms/FormComments.vue';
 
 
 export default {

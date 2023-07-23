@@ -6,62 +6,110 @@
                 <div v-if="isNewRecord || hasUnsavedChanges">Not Saved</div>
             </div>
             <div class="form-actions">
-                <button v-if="isNewRecord || hasUnsavedChanges" class="btn btn-sm btn-primary ms-2" @click="saveRecord">Save</button>
-                <button v-if="isDraft && !hasUnsavedChanges && isSubmittable" class="btn btn-sm btn-primary ms-2" @click="submitRecord">Submit</button>
-                <button v-if="isSubmitted && !hasUnsavedChanges && isSubmittable" class="btn btn-sm btn-primary ms-2" @click="cancelRecord">Cancel</button>
-                <button v-if="isCancelled && !hasUnsavedChanges && isSubmittable" class="btn btn-sm btn-danger ms-2" @click="deleteRecord">Delete</button>
+                <button v-if="isNewRecord || hasUnsavedChanges" class="btn btn-sm btn-primary ms-5" @click="saveRecord">Save</button>
+                <button v-if="isDraft && !hasUnsavedChanges && isSubmittable" class="btn btn-sm btn-primary ms-5" @click="submitRecord">Submit</button>
+                <button v-if="isSubmitted && !hasUnsavedChanges && isSubmittable" class="btn btn-sm btn-primary ms-5" @click="cancelRecord">Cancel</button>
+                <button v-if="isCancelled && !hasUnsavedChanges && isSubmittable" class="btn btn-sm btn-danger ms-5" @click="deleteRecord">Delete</button>
             </div>
         </div>
         
         <!-- form-section -->
         <div id="form-body">
-            <div id="form-fields" class="row">
+            <div class="row">
                 <div class="col">
                     <div class="form-group">
-                    <label for="customer">
-                        Customer
-                        <i class="bi bi-link-45deg ms-1"></i>
-                    </label>
-                    <input type="text" id="customer" class="form-control" 
-                        v-model="recordData['customer']"
-                        @focus="fetchCustomers"
-                        @input="fetchCustomers"
-                        required
-                        >
+                        <label for="customer">
+                            Customer
+                            <i class="bi bi-link-45deg ms-1"></i>
+                        </label>
+                        <input type="text" id="customer" class="form-control" 
+                            v-model="recordData.customer"
+                            @focus="fetchCustomers"
+                            @input="fetchCustomers"
+                            @blur="fetchOutstandingInvoices"
+                            required
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for ="total_outstanding">Total Outstanding Amount</label>
+                        <input type="number" id="total_outstanding" class="form-control"
+                            :value="recordData.total_outstanding"
+                            readonly
+                        />
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        <label for="subscription">
-                            Subscription
-                            <i class="bi bi-link-45deg ms-1"></i>
+                        <label for="payment_date">
+                            Payment Date
                         </label>
-                        <input type="text" id="subscription" class="form-control"
-                            v-model="recordData['subscription']"
-                            @focus="fetchSubscription"
-                            @input="fetchSubscription"
-                            >
+                        <input type="date" id="payment_date" class="form-control"
+                            v-model="recordData.payment_date"
+                        />
                     </div>
                     <div class="form-group">
-                        <label for="status">Status</label>
-                        <select id="status" class="form-select" 
-                            v-model="recordData['status']"
-                            required
-                            >
-                            <option>Active</option>
-                            <option>Inactive</option>
+                        <label for="mode_of_payment">Mode of Payment</label>
+                        <select id="mode_of_payment" class="form-control" v-model="recordData.mode_of_payment">
+                            <option value="Cash">Cash</option>
+                            <option value="Bank">Bank</option>
+                            <option value="Online">Online</option>
+                            <option value="Credit Card">Credit Card</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="subscription-start">Subscription Start</label>
-                        <input type="date" id="subscription-start" class="form-control"
-                            v-model="recordData['subscription_start']">
+                        <label for="paid_amount">Paid Amount</label>
+                        <input type="number" id="paid_amount" class="form-control"
+                            v-model="recordData.paid_amount"
+                            @blur="validatePaidAmount"
+                        />
+                        <div v-if="showAmountError" class="error-message">Paid amount cannot be more than total outstanding.</div>
                     </div>
                     <div class="form-group">
-                        <label for="subscription-end">Subscription End</label>
-                        <input type="date" id="subscription-end" class="form-control"
-                            v-model="recordData['subscription_end']">
+                        <label for="payment_reference">Payment Reference</label>
+                        <input
+                            type="text"
+                            id="payment_reference"
+                            class="form-control"
+                            v-model="recordData.payment_reference"
+                        />
                     </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                            <th>Select</th>
+                            <th>Name</th>
+                            <th>Subscription</th>
+                            <th>Subscription Plan</th>
+                            <th>Invoice Month</th>
+                            <th>Amount</th>
+                            <th>Outstanding</th>
+                            <th>Created On</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="invoice in outstandingInvoices" :key="invoice.name">
+                                <td>
+                                    <input type="checkbox" 
+                                        v-model="recordData.items" 
+                                        :value="invoice" 
+                                        @change="updateTotalOutstanding" 
+                                    />
+                                </td>
+                                <td>{{ invoice.name }}</td>
+                                <td>{{ invoice.subscription }}</td>
+                                <td>{{ invoice.subscription_plan }}</td>
+                                <td>{{ invoice.invoice_month }}</td>
+                                <td>{{ invoice.amount }}</td>
+                                <td>{{ invoice.outstanding }}</td>
+                                <td>{{ invoice.created_on }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -74,29 +122,45 @@
 <script>
 import axios from 'axios';
 import Awesomplete from 'awesomplete';
-import FormComments from '/src/components/form/FormComments.vue';
+import FormComments from '/src/components/forms/FormComments.vue';
 
 
 export default {
-    name: "SubscriptionForm",
+    name: "PaymentEntry",
     components: {
         'form-comments': FormComments,
     },
     data() {
         return {
             recordId: null,
-            tableName: 'subscription',
+            tableName: 'payment',
             recordData: {
+                customer: '',
+                payment_date: new Date().toISOString().slice(0, 10),
+                mode_of_payment: 'Cash',
+                total_outstanding: 0,
+                paid_amount: 0,
                 docstatus: 0,
+                payment_reference: '',
+                items: []
             },
+            outstandingInvoices: [],
+            // selectedInvoices: [],
+            showAmountError: false,
             oldData: {},
             commentInput: '',
             comments: [],
             newRecord: true,
-            isSubmittable: true
+            isSubmittable: true,
         };
     },
     computed: {
+        totalOutstanding() {
+            console.log('computed:totalOutstanding...');
+            // console.log('selectedInvoices2: ', this.selectedInvoices);
+            console.log('selectedInvoices2: ', this.recordData.items);
+            return this.recordData.items.reduce((total, invoice) => total + parseFloat(invoice.outstanding),0).toFixed(2);
+        },
         tableColumns() {
             const commonColumns = ['name', 'created_by', 'created_on', 'modified_by', 'modified_on', 'docstatus'];
             const columns = Object.keys(this.recordData);
@@ -137,40 +201,53 @@ export default {
         }
     },
     created() {
-        console.log('***SubscriptionPlan.created: ', this.recordData);
+        console.log('***PaymentFound.created: ', this.recordData);
         this.recordId = this.$route.params.recordId;
         // this.tableName = this.$route.params.tableName;
         this.fetchRecordData();
         // this.fetchComments();
     },
     methods: {
+        fetchOutstandingInvoices() {
+            console.log('methods: fetchOutstandingInvoices...', this.recordData.customer);
+            if (!this.recordData.customer) {
+                this.outstandingInvoices = [];
+                return;
+            }
+
+            axios
+                .get(`/api/fetchOutstandingInvoices.php?customer=${this.recordData.customer}`)
+                .then((response) => {
+                    console.log('xxxxx: ', response);
+                    this.outstandingInvoices = response.data.rows;
+                    // this.selectedInvoices = [];
+                    this.recordData.items = [];
+                })
+                .catch((error) => {
+                    console.error('Error fetching outstanding invoices: ', error);
+                });
+        },
+        validatePaidAmount() {
+            console.log('methods: validatePaidAmount...');
+            this.showAmountError = this.recordData.paid_amount > parseFloat(this.totalOutstanding);
+        },
+        updateTotalOutstanding() {
+            console.log('methods: updateTotalOutstanding...');
+            // this.showAmountError = false;
+            // this.recordData.paid_amount = 0;
+            // console.log('selectedInvoices1: ', this.selectedInvoices);
+            console.log('selectedInvoices1: ', this.recordData.items);
+            this.recordData.total_outstanding = this.totalOutstanding;
+        },
         fetchCustomers() {
             const inputValue = this.recordData['customer'];
             axios.get(`/api/fetchData.php?table=customers&query=${inputValue}&limit=20&offset=0`)
                 .then((response) => {
-                    // this.columns = response.data.columns;
-                    // this.rows.push.apply(this.rows, response.data.rows);
                     const customers = response.data.rows;
                     this.showAwesompleteDropdown('customer', customers);
                 })
                 .catch((error) => {
                     console.error('Error fetching customers: ', error);
-                })
-                .finally(() => {
-                    // this.isLoading = false;
-                });
-        },
-        fetchSubscriptionPlans() {
-            const inputValue = this.recordData['customer'];
-            axios.get(`/api/fetchData.php?table=subscription-plan&query=${inputValue}&limit=20&offset=0`)
-                .then((response) => {
-                    // this.columns = response.data.columns;
-                    // this.rows.push.apply(this.rows, response.data.rows);
-                    const subscriptionPlans = response.data.rows;
-                    this.showAwesompleteDropdown('subscription-plan', subscriptionPlans);
-                })
-                .catch((error) => {
-                    console.error('Error fetching subscription plan: ', error);
                 })
                 .finally(() => {
                     // this.isLoading = false;
@@ -193,17 +270,11 @@ export default {
             inputElement.awesomplete.list = items.map(item => item.name);
             inputElement.awesomplete.evaluate();
             inputElement.awesomplete.open();
-
-            // Add a class to the awesomplete container for custom styling
-            // const awesompleteContainer = inputElement.parentNode.querySelector('.awesomplete');
-            // if (awesompleteContainer) {
-            //     awesompleteContainer.classList.add('custom-awesomplete');
-            // }
         },
         fetchRecordData() {
-            console.log('***SubscriptionPlan.methods.fetchRecordData');
+            console.log('***PaymentForm.methods.fetchRecordData');
             // Make an API call to fetch record data based on recordId and tableName
-            axios.get(`/api/formAPI.php?table=${this.tableName}&recordId=${this.recordId}`)
+            axios.get(`/api/paymentEntry.php?table=${this.tableName}&recordId=${this.recordId}`)
                 .then((response) => {
                     const results = (response.data.rows ? response.data.rows[0] : []);
                     if (results) {
@@ -229,14 +300,13 @@ export default {
                 });
         },
         saveRecord() {
-            console.log('***SubscriptionPlan.methods.saveRecord: ', this.recordData);
+            console.log('***PaymentForm.methods.saveRecord: ', this.recordData);
             // Make an API call to save the record data
-            axios.post(`/api/formAPI.php?table=${this.tableName}&recordId=${this.recordId}`, this.recordData)
+            axios.post(`/api/paymentEntry.php?table=${this.tableName}&recordId=${this.recordId}`, this.recordData)
                 .then((response) => {
                     // this.fetchRecordData(); // Fetch the updated record data
-                    if (response.data.rows) {
-                        this.$router.push(`/desk/Edit/${this.tableName}/${response.data.rows[0].name}`);
-                    }
+                    console.log('abababababa: ', response);
+                    this.$router.push(`/desk/Edit/${this.tableName}/${response.data.rows[0].name}`);
                 })
                 .catch((error) => {
                     console.error('Error saving record: ', error);
@@ -297,10 +367,13 @@ export default {
             comments: this.comments
         }
     },
-    watch: {
-        recordData(newData) {
-            console.log('watch ===> recordData: ', newData);
-        }
-    }
 }
 </script>
+
+<style>
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+</style>

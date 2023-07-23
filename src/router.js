@@ -4,15 +4,15 @@ import LoginForm from './components/LoginForm.vue';
 import RegistrationForm from './components/RegistrationForm.vue';
 import DeskView from './components/DeskView.vue';
 import LogoutPage from './components/LogoutPage.vue';
-import FormView from './components/form/FormView.vue';
-import ListView from './components/form/ListView.vue';
+import FormView from './components/forms/FormView.vue';
+import ListView from './components/forms/ListView.vue';
 import NotFound from './pages/NotFound.vue';
 import DeskPage from './pages/DeskPage.vue';
-import SubscriptionPlan from './components/form/SubscriptionPlan.vue';
-import CustomerForm from './components/form/CustomerForm.vue';
-import SubscriptionForm from './components/form/SubscriptionForm.vue';
-import InvoiceEntry from './components/form/InvoiceEntry.vue';
-import PaymentEntry from './components/form/PaymentEntry.vue';
+import SubscriptionPlan from './components/forms/SubscriptionPlan.vue';
+import CustomerForm from './components/forms/CustomerForm.vue';
+import SubscriptionForm from './components/forms/SubscriptionForm.vue';
+import InvoiceEntry from './components/forms/InvoiceEntry.vue';
+import PaymentEntry from './components/forms/PaymentEntry.vue';
 
 const routes = [
   { path: '/', redirect: '/login'},

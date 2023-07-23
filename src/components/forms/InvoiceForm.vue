@@ -18,29 +18,49 @@
             <div id="form-fields" class="row">
                 <div class="col">
                     <div class="form-group">
-                    <label for="plan-name">Plan Name</label>
-                    <input type="text" id="plan-name" class="form-control" 
-                        v-model="recordData['plan_name']" 
+                    <label for="customer">
+                        Customer
+                        <i class="bi bi-link-45deg ms-1"></i>
+                    </label>
+                    <input type="text" id="customer" class="form-control" 
+                        v-model="recordData['customer']"
+                        @focus="fetchCustomers"
+                        @input="fetchCustomers"
                         required
                         >
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-group">
-                    <label for="billing-interval">Billing Interval</label>
-                    <select id="billing-interval" class="form-select" aria-label="Billing Interval" 
-                        v-model="recordData['billing_interval']"
-                        >
-                        <option selected>Month</option>
-                        <option>Year</option>
-                    </select>
+                        <label for="subscription">
+                            Subscription
+                            <i class="bi bi-link-45deg ms-1"></i>
+                        </label>
+                        <input type="text" id="subscription" class="form-control"
+                            v-model="recordData['subscription']"
+                            @focus="fetchSubscription"
+                            @input="fetchSubscription"
+                            >
                     </div>
                     <div class="form-group">
-                    <label for="cost">Cost</label>
-                    <input type="number" class="form-control" 
-                        v-model="recordData['cost']"
-                        required
-                        >
+                        <label for="status">Status</label>
+                        <select id="status" class="form-select" 
+                            v-model="recordData['status']"
+                            required
+                            >
+                            <option>Active</option>
+                            <option>Inactive</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="subscription-start">Subscription Start</label>
+                        <input type="date" id="subscription-start" class="form-control"
+                            v-model="recordData['subscription_start']">
+                    </div>
+                    <div class="form-group">
+                        <label for="subscription-end">Subscription End</label>
+                        <input type="date" id="subscription-end" class="form-control"
+                            v-model="recordData['subscription_end']">
                     </div>
                 </div>
             </div>
@@ -53,17 +73,19 @@
 
 <script>
 import axios from 'axios';
-import FormComments from '/src/components/form/FormComments.vue';
+import Awesomplete from 'awesomplete';
+import FormComments from '/src/components/forms/FormComments.vue';
+
 
 export default {
-    name: "SubscriptionPlan",
+    name: "SubscriptionForm",
     components: {
         'form-comments': FormComments,
     },
     data() {
         return {
             recordId: null,
-            tableName: 'subscription-plan',
+            tableName: 'subscription',
             recordData: {
                 docstatus: 0,
             },
@@ -71,7 +93,7 @@ export default {
             commentInput: '',
             comments: [],
             newRecord: true,
-            isSubmittable: false
+            isSubmittable: true
         };
     },
     computed: {
@@ -122,6 +144,62 @@ export default {
         // this.fetchComments();
     },
     methods: {
+        fetchCustomers() {
+            const inputValue = this.recordData['customer'];
+            axios.get(`/api/fetchData.php?table=customers&query=${inputValue}&limit=20&offset=0`)
+                .then((response) => {
+                    // this.columns = response.data.columns;
+                    // this.rows.push.apply(this.rows, response.data.rows);
+                    const customers = response.data.rows;
+                    this.showAwesompleteDropdown('customer', customers);
+                })
+                .catch((error) => {
+                    console.error('Error fetching customers: ', error);
+                })
+                .finally(() => {
+                    // this.isLoading = false;
+                });
+        },
+        fetchSubscriptionPlans() {
+            const inputValue = this.recordData['customer'];
+            axios.get(`/api/fetchData.php?table=subscription-plan&query=${inputValue}&limit=20&offset=0`)
+                .then((response) => {
+                    // this.columns = response.data.columns;
+                    // this.rows.push.apply(this.rows, response.data.rows);
+                    const subscriptionPlans = response.data.rows;
+                    this.showAwesompleteDropdown('subscription-plan', subscriptionPlans);
+                })
+                .catch((error) => {
+                    console.error('Error fetching subscription plan: ', error);
+                })
+                .finally(() => {
+                    // this.isLoading = false;
+                });
+        },
+        showAwesompleteDropdown(inputId, items) {
+            // Get the input element
+            const inputElement = document.getElementById(inputId);
+
+            // Create the awesomplete instance if not already created
+            if (!inputElement.awesomplete) {
+                inputElement.awesomplete = new Awesomplete(inputElement, {
+                    minChars: 0,
+                    maxItems: 20, // Display 20 items by default
+                    autoFirst: true,
+                });
+            }
+
+            // Set the list of items and open the dropdown
+            inputElement.awesomplete.list = items.map(item => item.name);
+            inputElement.awesomplete.evaluate();
+            inputElement.awesomplete.open();
+
+            // Add a class to the awesomplete container for custom styling
+            // const awesompleteContainer = inputElement.parentNode.querySelector('.awesomplete');
+            // if (awesompleteContainer) {
+            //     awesompleteContainer.classList.add('custom-awesomplete');
+            // }
+        },
         fetchRecordData() {
             console.log('***SubscriptionPlan.methods.fetchRecordData');
             // Make an API call to fetch record data based on recordId and tableName
