@@ -21,11 +21,10 @@ const routes = [
   { 
     path: '/desk', 
     name: 'desk', 
-    components: { default: DeskView },
     children: [
         {
             path: '',
-            component: DeskPage,
+            component: DeskView,
         },
         {
             path: 'List/:tableName',
