@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 import { createRouter, createWebHistory } from 'vue-router';
-import LoginForm from './components/LoginForm.vue';
-import RegistrationForm from './components/RegistrationForm.vue';
+import LoginForm from './components/forms/LoginForm.vue';
+import RegistrationForm from './components/forms/RegistrationForm.vue';
 import DeskView from './components/DeskView.vue';
-import LogoutPage from './components/LogoutPage.vue';
+import LogoutForm from './components/forms/LogoutForm.vue';
 import FormView from './components/forms/FormView.vue';
 import ListView from './components/forms/ListView.vue';
 import NotFound from './pages/NotFound.vue';
@@ -71,7 +71,7 @@ const routes = [
         // }
     ] 
   },
-  { path: '/logout', name: 'logout', component: LogoutPage},
+  { path: '/logout', name: 'logout', component: LogoutForm},
   { path: '/:notFound(.*)', component: NotFound },
 ];
 
