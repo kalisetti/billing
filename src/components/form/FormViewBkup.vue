@@ -1,15 +1,15 @@
 <template>
     <div class="form-page">
         <!-- form-toolbar -->
-        <div id="form-toolbar">
-            <div id="form-indicators">
+        <div class="form-toolbar d-flex justify-content-end align-items-center">
+            <div class="form-indicators">
                 <div v-if="isNewRecord || hasUnsavedChanges">Not Saved</div>
             </div>
-            <div id="form-actions">
-                <button v-if="isNewRecord || hasUnsavedChanges" class="btn btn-primary" @click="saveRecord">Save</button>
-                <button v-if="isDraft" class="btn btn-primary" @click="submitRecord">Submit</button>
-                <button v-if="isSubmitted" class="btn btn-primary" @click="cancelRecord">Cancel</button>
-                <button v-if="isCancelled" class="btn btn-danger" @click="deleteRecord">Delete</button>
+            <div class="form-actions">
+                <button v-if="isNewRecord || hasUnsavedChanges" class="btn btn-sm btn-primary ms-2" @click="saveRecord">Save</button>
+                <button v-if="isDraft" class="btn btn-sm btn-primary ms-2" @click="submitRecord">Submit</button>
+                <button v-if="isSubmitted" class="btn btn-sm btn-primary ms-2" @click="cancelRecord">Cancel</button>
+                <button v-if="isCancelled" class="btn btn-sm btn-danger ms-2" @click="deleteRecord">Delete</button>
             </div>
         </div>
         

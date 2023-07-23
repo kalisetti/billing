@@ -1,15 +1,15 @@
 <template>
     <div class="form-page">
         <!-- form-toolbar -->
-        <div id="form-toolbar">
-            <div id="form-indicators">
+        <div class="form-toolbar d-flex justify-content-end align-items-center">
+            <div class="form-indicators">
                 <div v-show="isNewRecord || hasUnsavedChanges">Not Saved</div>
             </div>
-            <div id="form-actions">
-                <button v-show="isNewRecord || hasUnsavedChanges" class="btn btn-primary" @click="saveRecord">Save</button>
-                <button v-show="isDraft && !hasUnsavedChanges && isSubmittable" class="btn btn-primary" @click="submitRecord">Submit</button>
-                <button v-show="isSubmitted && !hasUnsavedChanges && isSubmittable" class="btn btn-primary" @click="cancelRecord">Cancel</button>
-                <button v-show="isCancelled && !hasUnsavedChanges && isSubmittable" class="btn btn-danger" @click="deleteRecord">Delete</button>
+            <div class="form-actions">
+                <button v-show="isNewRecord || hasUnsavedChanges" class="btn btn-sm btn-primary ms-2" @click="saveRecord">Save</button>
+                <button v-show="isDraft && !hasUnsavedChanges && isSubmittable" class="btn btn-sm btn-primary ms-2" @click="submitRecord">Submit</button>
+                <button v-show="isSubmitted && !hasUnsavedChanges && isSubmittable" class="btn btn-sm btn-primary ms-2" @click="cancelRecord">Cancel</button>
+                <button v-show="isCancelled && !hasUnsavedChanges && isSubmittable" class="btn btn-sm btn-danger ms-2" @click="deleteRecord">Delete</button>
             </div>
         </div>
         

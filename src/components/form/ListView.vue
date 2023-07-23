@@ -3,7 +3,7 @@
         <header>
             <div class="d-flex justify-content-end">
                 <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         Menu
                     </button>
                     <ul class="dropdown-menu">
@@ -11,8 +11,8 @@
                         <li><a class="dropdown-item" href="#">Share</a></li>
                     </ul>
                 </div>
-                <button class="btn btn-primary ms-2" @click="refreshData">Refresh</button>
-                <button class="btn btn-primary ms-2" @click="createNewRecord">New</button>
+                <button class="btn btn-sm btn-primary ms-2" @click="refreshData">Refresh</button>
+                <button class="btn btn-sm btn-primary ms-2" @click="createNewRecord">New</button>
             </div>
         </header>
 
