@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h2 class="mt-5">Register</h2>
+    <h3 class="mt-5">Register</h3>
     <form @submit.prevent="register" class="mt-4">
       <div class="form-group">
         <label for="username">Name:</label>
