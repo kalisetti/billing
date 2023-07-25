@@ -1,5 +1,16 @@
 <template>
     <div class="form-page">
+        <!-- Bread crumbs -->
+        <div>
+            <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/desk">Desk</a></li>
+                <li class="breadcrumb-item"><a :href="'/desk/List/' + tableName">{{ tableName }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ recordId }}</li>
+            </ol>
+            </nav>
+        </div>
+
         <!-- form-toolbar -->
         <div class="form-toolbar d-flex justify-content-end align-items-center">
             <div class="form-indicators">

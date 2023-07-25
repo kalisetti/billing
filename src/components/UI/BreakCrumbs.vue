@@ -20,3 +20,9 @@
     </ol>
     </nav>
 </template>
+
+<script>
+export default {
+    name: "BreadCrumbs",
+}
+</script>
