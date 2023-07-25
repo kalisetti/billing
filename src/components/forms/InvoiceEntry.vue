@@ -19,12 +19,13 @@
             <div id="form-fields" class="row">
                 <div class="col">
                     <div class="form-group">
-                        <label for="invoice-month">
+                        <label for="invoice_month" :class="{ 'required': isInvoiceMonthEmpty }">
                             Month
                             <i class="bi bi-calendar-month-fill ms-1"></i>
                         </label>
                         <input type="month" id="invoice-month" class="form-control" 
                             v-model="recordData['invoice_month']"
+                            :class="{ 'error-border': isInvoiceMonthEmpty }"
                             required
                             >
                     </div>
@@ -74,6 +75,7 @@ export default {
             recordId: null,
             tableName: 'invoice-entry',
             recordData: {
+                invoice_month: '',
                 docstatus: 0,
             },
             oldData: {},
@@ -84,6 +86,9 @@ export default {
         };
     },
     computed: {
+        isInvoiceMonthEmpty() {
+            return this.recordData.invoice_month === '';
+        },
         tableColumns() {
             const commonColumns = ['name', 'created_by', 'created_on', 'modified_by', 'modified_on', 'docstatus'];
             const columns = Object.keys(this.recordData);

@@ -33,3 +33,13 @@ main {
     padding: 1rem;
 }
 </style>
+
+<style>
+.error-border {
+  border-color: red !important;
+  background-color: #fffdf4;
+}
+.required {
+  color: red;
+}
+</style>

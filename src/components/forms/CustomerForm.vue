@@ -18,22 +18,26 @@
             <div id="form-fields" class="row">
                 <div class="col">
                     <div class="form-group">
-                    <label for="customer-name">Customer Name</label>
-                    <input type="text" id="customer-name" class="form-control" 
+                    <label for="customer_name" :class="{ 'required': isCustomerNameEmpty }">Customer Name</label>
+                    <input type="text" id="customer_name" class="form-control" 
                         v-model="recordData['customer_name']" 
+                        :class="{ 'error-border': isCustomerNameEmpty}"
                         required
                         >
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        <label for="email">Email ID</label>
+                        <label for="email" :class="{ 'required': isEmailEmpty }">Email ID</label>
                         <input type="email" id="email" class="form-control"
-                            v-model="recordData['email']">
+                            v-model="recordData['email']"
+                            :class="{ 'error-border': isEmailEmpty }"
+                            required
+                            >
                     </div>
                     <div class="form-group">
-                        <label for="contact-no">Contact No</label>
-                        <input type="text" id="contact-no" class="form-control" 
+                        <label for="contact_no">Contact No</label>
+                        <input type="text" id="contact_no" class="form-control" 
                             v-model="recordData['contact_no']"
                             >
                     </div>
@@ -86,16 +90,25 @@ export default {
             recordId: null,
             tableName: 'customers',
             recordData: {
+                customer_name: '',
+                email: '',
                 docstatus: 0,
             },
             oldData: {},
             commentInput: '',
             comments: [],
             newRecord: true,
-            isSubmittable: false
+            isSubmittable: false,
+            showErrorDialog: false
         };
     },
     computed: {
+        isCustomerNameEmpty() {
+            return this.recordData['customer_name'].trim() === '';
+        },
+        isEmailEmpty() {
+            return this.recordData['email'].trim() === '';
+        },
         tableColumns() {
             const commonColumns = ['name', 'created_by', 'created_on', 'modified_by', 'modified_on', 'docstatus'];
             const columns = Object.keys(this.recordData);

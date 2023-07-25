@@ -18,27 +18,31 @@
             <div id="form-fields" class="row">
                 <div class="col">
                     <div class="form-group">
-                    <label for="plan-name">Plan Name</label>
-                    <input type="text" id="plan-name" class="form-control" 
-                        v-model="recordData['plan_name']" 
+                    <label for="plan_name" :class="{ 'required': isPlanNameEmpty }">Plan Name</label>
+                    <input type="text" id="plan_name" class="form-control" 
+                        v-model="recordData['plan_name']"
+                        :class="{ 'error-border': isPlanNameEmpty }"
                         required
                         >
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-group">
-                    <label for="billing-interval">Billing Interval</label>
-                    <select id="billing-interval" class="form-select" aria-label="Billing Interval" 
+                    <label for="billing_interval" :class="{ 'required': isBillingIntervalEmpty }">Billing Interval</label>
+                    <select id="billing_interval" class="form-select" aria-label="Billing Interval" 
                         v-model="recordData['billing_interval']"
+                        :class="{ 'error-border': isBillingIntervalEmpty }"
                         >
-                        <option selected>Month</option>
+                        <option></option>
+                        <option>Month</option>
                         <option>Year</option>
                     </select>
                     </div>
                     <div class="form-group">
-                    <label for="cost">Cost</label>
-                    <input type="number" class="form-control" 
+                    <label for="cost" :class="{ 'required': isCostEmpty }">Cost</label>
+                    <input type="number" id="cost" class="form-control" 
                         v-model="recordData['cost']"
+                        :class="{ 'error-border': isCostEmpty }"
                         required
                         >
                     </div>
@@ -65,6 +69,9 @@ export default {
             recordId: null,
             tableName: 'subscription-plan',
             recordData: {
+                plan_name: '',
+                billing_interval: 'Month',
+                cost: 0,
                 docstatus: 0,
             },
             oldData: {},
@@ -75,6 +82,15 @@ export default {
         };
     },
     computed: {
+        isPlanNameEmpty() {
+            return this.recordData.plan_name === '';
+        },
+        isBillingIntervalEmpty() {
+            return this.recordData.billing_interval === '';
+        },
+        isCostEmpty() {
+            return isNaN(this.recordData.cost);
+        },
         tableColumns() {
             const commonColumns = ['name', 'created_by', 'created_on', 'modified_by', 'modified_on', 'docstatus'];
             const columns = Object.keys(this.recordData);

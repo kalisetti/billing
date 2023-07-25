@@ -18,12 +18,13 @@
             <div class="row">
                 <div class="col">
                     <div class="form-group">
-                        <label for="customer">
+                        <label for="customer" :class="{ 'required': isCustomerEmpty }">
                             Customer
                             <i class="bi bi-link-45deg ms-1"></i>
                         </label>
                         <input type="text" id="customer" class="form-control" 
                             v-model="recordData.customer"
+                            :class="{ 'error-border': isCustomerEmpty }"
                             @focus="fetchCustomers"
                             @input="fetchCustomers"
                             @blur="fetchOutstandingInvoices"
@@ -40,16 +41,21 @@
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        <label for="payment_date">
+                        <label for="payment_date" :class="{ 'required': isPaymentDateEmpty }">
                             Payment Date
                         </label>
                         <input type="date" id="payment_date" class="form-control"
                             v-model="recordData.payment_date"
+                            :class="{ 'error-border': isPaymentDateEmpty }"
                         />
                     </div>
                     <div class="form-group">
-                        <label for="mode_of_payment">Mode of Payment</label>
-                        <select id="mode_of_payment" class="form-control" v-model="recordData.mode_of_payment">
+                        <label for="mode_of_payment" :class="{ 'required': isModeOfPaymentEmpty }">Mode of Payment</label>
+                        <select id="mode_of_payment" class="form-control" 
+                            v-model="recordData.mode_of_payment"
+                            :class="{ 'error-border': isModeOfPaymentEmpty }"
+                            >
+                            <option value=""></option>
                             <option value="Cash">Cash</option>
                             <option value="Bank">Bank</option>
                             <option value="Online">Online</option>
@@ -57,9 +63,10 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="paid_amount">Paid Amount</label>
+                        <label for="paid_amount" :class="{ 'required': isPaidAmountEmpty }">Paid Amount</label>
                         <input type="number" id="paid_amount" class="form-control"
                             v-model="recordData.paid_amount"
+                            :class="{ 'error-border': isPaidAmountEmpty }"
                             @blur="validatePaidAmount"
                         />
                         <div v-if="showAmountError" class="error-message">Paid amount cannot be more than total outstanding.</div>
@@ -155,6 +162,18 @@ export default {
         };
     },
     computed: {
+        isCustomerEmpty() {
+            return this.recordData.customer === '';
+        },
+        isPaymentDateEmpty() {
+            return this.recordData.payment_date === '';
+        },
+        isModeOfPaymentEmpty() {
+            return this.recordData.mode_of_payment === '';
+        },
+        isPaidAmountEmpty() {
+            return isNaN(this.recordData.paid_amount);
+        },
         totalOutstanding() {
             console.log('computed:totalOutstanding...');
             // console.log('selectedInvoices2: ', this.selectedInvoices);
@@ -270,6 +289,7 @@ export default {
             inputElement.awesomplete.list = items.map(item => item.name);
             inputElement.awesomplete.evaluate();
             inputElement.awesomplete.open();
+            inputElement.focus();
         },
         fetchRecordData() {
             console.log('***PaymentForm.methods.fetchRecordData');

@@ -18,12 +18,13 @@
             <div id="form-fields" class="row">
                 <div class="col">
                     <div class="form-group">
-                    <label for="customer">
+                    <label for="customer" :class="{ 'required': isCustomerEmpty }">
                         Customer
                         <i class="bi bi-link-45deg ms-1"></i>
                     </label>
                     <input type="text" id="customer" class="form-control" 
                         v-model="recordData['customer']"
+                        :class="{ 'error-border': isCustomerEmpty }"
                         @focus="fetchCustomers"
                         @input="fetchCustomers"
                         required
@@ -32,34 +33,39 @@
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        <label for="subscription-plan">
+                        <label for="subscription_plan" :class="{ 'required': isSubscriptionPlanEmpty }">
                             Subscription Plan
                             <i class="bi bi-link-45deg ms-1"></i>
                         </label>
-                        <input type="text" id="subscription-plan" class="form-control"
+                        <input type="text" id="subscription_plan" class="form-control"
                             v-model="recordData['subscription_plan']"
+                            :class="{ 'error-border': isSubscriptionPlanEmpty }"
                             @focus="fetchSubscriptionPlans"
                             @input="fetchSubscriptionPlans"
                             >
                     </div>
                     <div class="form-group">
-                        <label for="status">Status</label>
+                        <label for="status" :class="{ 'required': isStatusEmpty }">Status</label>
                         <select id="status" class="form-select" 
                             v-model="recordData['status']"
+                            :class="{ 'error-border': isStatusEmpty}"
                             required
                             >
+                            <option></option>
                             <option>Active</option>
                             <option>Inactive</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="subscription-start">Subscription Start</label>
-                        <input type="date" id="subscription-start" class="form-control"
-                            v-model="recordData['subscription_start']">
+                        <label for="subscription_start" :class="{ 'required': isSubscriptionStartEmpty }">Subscription Start</label>
+                        <input type="date" id="subscription_start" class="form-control"
+                            v-model="recordData['subscription_start']"
+                            :class="{ 'error-border': isSubscriptionStartEmpty}"
+                            >
                     </div>
                     <div class="form-group">
-                        <label for="subscription-end">Subscription End</label>
-                        <input type="date" id="subscription-end" class="form-control"
+                        <label for="subscription_end">Subscription End</label>
+                        <input type="date" id="subscription_end" class="form-control"
                             v-model="recordData['subscription_end']">
                     </div>
                 </div>
@@ -87,6 +93,10 @@ export default {
             recordId: null,
             tableName: 'subscription',
             recordData: {
+                customer: '',
+                subscription_plan: '',
+                status: 'Active',
+                subscription_start: new Date().toISOString().slice(0, 10),
                 docstatus: 0,
             },
             oldData: {},
@@ -97,6 +107,18 @@ export default {
         };
     },
     computed: {
+        isCustomerEmpty() {
+            return this.recordData.customer === '';
+        },
+        isSubscriptionPlanEmpty() {
+            return this.recordData.subscription_plan === '';
+        },
+        isStatusEmpty() {
+            return this.recordData.status === '';
+        },
+        isSubscriptionStartEmpty() {
+            return this.recordData.subscription_start === '';
+        },
         tableColumns() {
             const commonColumns = ['name', 'created_by', 'created_on', 'modified_by', 'modified_on', 'docstatus'];
             const columns = Object.keys(this.recordData);
@@ -161,13 +183,13 @@ export default {
                 });
         },
         fetchSubscriptionPlans() {
-            const inputValue = this.recordData['subscription-plan'];
-            axios.get(`/api/fetchData.php?table=subscription-plan&query=${inputValue}&limit=20&offset=0`)
+            const inputValue = this.recordData['subscription_plan'];
+            axios.get(`/api/fetchData.php?table=subscription_plan&query=${inputValue}&limit=20&offset=0`)
                 .then((response) => {
                     // this.columns = response.data.columns;
                     // this.rows.push.apply(this.rows, response.data.rows);
                     const subscriptionPlans = response.data.rows;
-                    this.showAwesompleteDropdown('subscription-plan', subscriptionPlans);
+                    this.showAwesompleteDropdown('subscription_plan', subscriptionPlans);
                 })
                 .catch((error) => {
                     console.error('Error fetching subscription plan: ', error);
@@ -193,6 +215,7 @@ export default {
             inputElement.awesomplete.list = items.map(item => item.name);
             inputElement.awesomplete.evaluate();
             inputElement.awesomplete.open();
+            inputElement.focus();
 
             // Add a class to the awesomplete container for custom styling
             // const awesompleteContainer = inputElement.parentNode.querySelector('.awesomplete');
