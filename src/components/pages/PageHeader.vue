@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid p-5 page-header text-white text-center">
-    <h1>Billing System</h1>
-    <p>This is simple billing solution</p>
+    <h1>Subscription Billing System</h1>
+    <p>Simplify your billing process, managing subscriptions and payments effortlessly</p>
   </div>
 </template>
 
