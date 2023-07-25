@@ -5,7 +5,13 @@
             <nav-bar v-if="isUserLoggedIn"></nav-bar>
         </header>
         <main>
-            <router-view></router-view>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+                    <router-view></router-view>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
         </main>
         <footer>
             <page-footer></page-footer>

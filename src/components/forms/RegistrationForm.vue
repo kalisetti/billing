@@ -1,22 +1,24 @@
 <template>
-  <div class="container">
-    <h3 class="mt-5">Register</h3>
-    <form @submit.prevent="register" class="mt-4">
-      <div class="form-group">
-        <label for="username">Name:</label>
-        <input type="text" id="username" v-model="username" class="form-control" required>
-      </div>
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" id="email" v-model="email" class="form-control" required>
-      </div>
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" id="password" v-model="password" class="form-control" autocomplete="off" required>
-      </div>
-      <button type="submit" class="btn btn-primary">Register</button>
-    </form>
-  </div>
+  <base-card>
+    <div class="container">
+      <h3 class="mt-5">Register</h3>
+      <form @submit.prevent="register" class="mt-4">
+        <div class="form-group">
+          <label for="username">Name:</label>
+          <input type="text" id="username" v-model="username" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" v-model="email" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" v-model="password" class="form-control" autocomplete="off" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+      </form>
+    </div>
+  </base-card>
 </template>
 
 
