@@ -1,6 +1,15 @@
 <template>
     <div id="list-view">
         <header>
+            <!-- Bread crumbs -->
+            <div>
+                <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/desk">Desk</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ tableName }}</li>
+                </ol>
+                </nav>
+            </div>
             <div class="d-flex justify-content-end">
                 <div class="dropdown">
                     <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
