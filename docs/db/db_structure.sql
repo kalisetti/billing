@@ -106,7 +106,9 @@ CREATE TABLE subscription(
 	created_by  VARCHAR(140),
 	created_on  DATETIME DEFAULT CURRENT_TIMESTAMP,
 	modified_by VARCHAR(140),
-	modified_on DATETIME DEFAULT CURRENT_TIMESTAMP
+	modified_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (customer) REFERENCES customers(name),
+	FOREIGN KEY (subscription_plan) REFERENCES subscription_plan(name)
 );
 
 
@@ -153,7 +155,10 @@ CREATE TABLE invoice(
 	created_by  VARCHAR(140),
 	created_on  DATETIME DEFAULT CURRENT_TIMESTAMP,
 	modified_by VARCHAR(140),
-	modified_on DATETIME DEFAULT CURRENT_TIMESTAMP
+	modified_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (customer) REFERENCES customers(name),
+	FOREIGN KEY (subscription_plan) REFERENCES subscription_plan(name),
+	FOREIGN KEY (subscription) REFERENCES subscription(name)
 );
 
 --
@@ -173,7 +178,8 @@ CREATE TABLE payment(
 	created_by  VARCHAR(140),
 	created_on  DATETIME DEFAULT CURRENT_TIMESTAMP,
 	modified_by VARCHAR(140),
-	modified_on DATETIME DEFAULT CURRENT_TIMESTAMP
+	modified_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (customer) REFERENCES customers(name)
 );
 
 CREATE TABLE payment_item(
@@ -191,5 +197,9 @@ CREATE TABLE payment_item(
 	created_by  VARCHAR(140),
 	created_on  DATETIME DEFAULT CURRENT_TIMESTAMP,
 	modified_by VARCHAR(140),
-	modified_on DATETIME DEFAULT CURRENT_TIMESTAMP
+	modified_on DATETIME DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (subscription) REFERENCES subscription(name),
+	FOREIGN KEY (subscription_plan) REFERENCES subscription_plan(name),
+	FOREIGN KEY (invoice) REFERENCES invoice(name),
+	FOREIGN KEY (parent) REFERENCES payment(name)
 );
